@@ -1,0 +1,150 @@
+/* ===================================================
+   Navbar
+   =================================================== */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 0 2rem;
+  transition: all .4s ease;
+  background: transparent;
+}
+
+.navbar.scrolled {
+  background: rgba(10, 8, 0, .95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(244, 196, 48, .2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, .5);
+}
+
+.nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+}
+
+.nav-logo {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 1.4rem;
+  color: var(--gold);
+  text-decoration: none;
+  animation: textGlow 3s infinite;
+  cursor: pointer;
+}
+
+.nav-logo span {
+  color: var(--white);
+}
+
+.nav-links {
+  height: max-content;
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  align-items: center;
+}
+
+.nav-links a {
+  color: rgba(255, 255, 255, .8);
+  text-decoration: none;
+  font-size: .85rem;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  transition: all .3s;
+  position: relative;
+  cursor: pointer;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  transition: width .3s;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-links li:last-child span {
+  color: var(--dark);
+  font-weight: 700;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 5px;
+  background: transparent;
+  border: none;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 2px;
+  background: var(--gold);
+  display: block;
+  transition: all .3s;
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
+  background: rgba(10, 8, 0, .98);
+  backdrop-filter: blur(20px);
+  padding: 2rem;
+  border-bottom: 1px solid rgba(244, 196, 48, .2);
+  z-index: 999;
+}
+
+.mobile-menu.open {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  animation: slideDown .45s ease;
+}
+
+.mobile-menu a {
+  display: block;
+  color: rgba(255, 255, 255, .8);
+  text-decoration: none;
+  padding: .8rem 0;
+  border-bottom: 1px solid rgba(244, 196, 48, .1);
+  font-size: .9rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  cursor: pointer;
+  transition: color .3s;
+}
+
+.mobile-menu a:hover {
+  color: var(--gold);
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+}

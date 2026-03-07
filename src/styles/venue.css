@@ -1,0 +1,152 @@
+/* ===================================================
+   Venue & Schedule
+   =================================================== */
+#venue {
+  background: var(--dark);
+}
+
+.venue-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.venue-grid>:first-child {
+  position: sticky;
+  top: 100px;
+}
+
+.venue-card-main {
+  background: linear-gradient(135deg, #1A1400, #0F0C00);
+  border: 1px solid rgba(244, 196, 48, .2);
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.venue-card-main::before {
+  content: '📍';
+  position: absolute;
+  top: -30px;
+  right: -20px;
+  font-size: 10rem;
+  opacity: .05;
+}
+
+.venue-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.8rem;
+  color: var(--white);
+  margin-bottom: .5rem;
+}
+
+.venue-address {
+  color: rgba(255, 255, 255, .5);
+  font-size: .9rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.venue-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.venue-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(244, 196, 48, .05);
+  border: 1px solid rgba(244, 196, 48, .1);
+}
+
+.venue-detail-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.venue-detail-label {
+  font-size: .65rem;
+  letter-spacing: .2em;
+  color: rgba(244, 196, 48, .7);
+  text-transform: uppercase;
+  margin-bottom: .2rem;
+}
+
+.venue-detail-val {
+  font-size: .95rem;
+  color: var(--white);
+  font-weight: 500;
+}
+
+.schedule-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--gold);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.schedule-item {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 1.5rem;
+  padding: 1.2rem;
+  border-bottom: 1px solid rgba(244, 196, 48, .08);
+  transition: all .3s;
+}
+
+.schedule-item:hover {
+  background: rgba(244, 196, 48, .03);
+}
+
+.schedule-time {
+  font-family: 'Cinzel', serif;
+  font-size: .8rem;
+  color: var(--gold);
+  text-align: right;
+  padding-top: .1rem;
+}
+
+.schedule-event-name {
+  font-size: .9rem;
+  color: var(--white);
+  margin-bottom: .2rem;
+  font-weight: 500;
+}
+
+.schedule-event-venue {
+  font-size: .75rem;
+  color: rgba(255, 255, 255, .4);
+}
+
+.schedule-event-tag {
+  font-size: .65rem;
+  padding: .15rem .6rem;
+  background: rgba(244, 196, 48, .1);
+  color: var(--gold);
+  border-radius: 2px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-top: .3rem;
+}
+
+@media (max-width: 1024px) {
+  .venue-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .venue-grid>:first-child {
+    position: static;
+  }
+}

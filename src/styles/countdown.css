@@ -1,0 +1,88 @@
+/* ===================================================
+   Countdown Timer
+   =================================================== */
+.countdown-wrap {
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.countdown-label-row {
+  font-size: .7rem;
+  letter-spacing: .4em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .75rem;
+}
+
+.countdown-label-row::before,
+.countdown-label-row::after {
+  content: '';
+  flex: 1;
+  max-width: 80px;
+  height: 1px;
+}
+
+.countdown-label-row::before {
+  background: linear-gradient(to right, transparent, var(--gold));
+}
+
+.countdown-label-row::after {
+  background: linear-gradient(to left, transparent, var(--gold));
+}
+
+.countdown-row {
+  display: flex;
+  gap: 1px;
+  justify-content: center;
+  /* background: rgba(244,196,48,.1); */
+}
+
+.countdown-item {
+  flex: 1;
+  max-width: 150px;
+  padding: 2rem;
+  background: var(--dark2);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.countdown-num {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 3rem;
+  color: var(--gold);
+  display: block;
+  line-height: 1;
+}
+
+.countdown-unit {
+  font-size: .65rem;
+  letter-spacing: .3em;
+  color: rgba(255, 255, 255, .4);
+  text-transform: uppercase;
+  margin-top: .5rem;
+}
+
+.countdown-seconds-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  animation: glowLine 1s ease infinite;
+}
+
+@media (max-width: 480px) {
+  .countdown-num {
+    font-size: 2rem;
+  }
+
+  .countdown-item {
+    padding: 1.2rem .5rem;
+  }
+}

@@ -1,0 +1,192 @@
+/* ===================================================
+   Hero Section
+   =================================================== */
+.hero {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  background: transparent;
+}
+
+.hero-canvas {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hex-grid {
+  position: absolute;
+  inset: 0;
+  opacity: .05;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(244, 196, 48, .3) 30px, rgba(244, 196, 48, .3) 31px),
+    repeating-linear-gradient(60deg, transparent, transparent 30px, rgba(244, 196, 48, .3) 30px, rgba(244, 196, 48, .3) 31px),
+    repeating-linear-gradient(120deg, transparent, transparent 30px, rgba(244, 196, 48, .3) 30px, rgba(244, 196, 48, .3) 31px);
+}
+
+.hero-particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: particle linear infinite;
+}
+
+.hero-rings {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.hero-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(244, 196, 48, .15);
+  transform: translate(-50%, -50%);
+  animation: spinSlow linear infinite;
+}
+
+.hero-ring::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 10px var(--gold);
+}
+
+.stars {
+  position: absolute;
+  inset: 0;
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--gold-pale);
+  border-radius: 50%;
+  animation: starTwinkle ease-in-out infinite;
+}
+
+.hero-content {
+  width: 100%;
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 2rem;
+  max-width: 1100px;
+  overflow: visible;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  border: 1px solid rgba(244, 196, 48, .4);
+  padding: .4rem 1.2rem;
+  border-radius: 50px;
+  margin-bottom: 1.5rem;
+}
+
+.hero-badge-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  animation: pulseGold 2s infinite;
+}
+
+.hero-badge-text {
+  font-size: .75rem;
+  letter-spacing: .3em;
+  color: var(--gold);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.hero-year {
+  text-align: center;
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: clamp(6rem, 15vw, 150px);
+  font-weight: 900;
+  line-height: .9;
+  background: linear-gradient(90deg, var(--gold-dark) 0%, var(--gold) 35%, var(--gold-light) 50%, var(--gold) 65%, var(--gold-dark) 100%);
+  background-size: 500% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 8s linear infinite;
+  display: inline-block;
+  overflow: visible;
+  margin-bottom: -.5rem;
+}
+
+.hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2rem, 6vw, 50px);
+  font-weight: 900;
+  letter-spacing: .2em;
+  color: var(--white);
+}
+
+.hero-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-style: italic;
+  color: rgba(255, 255, 255, .8);
+  margin: 1.5rem 0;
+  letter-spacing: .2em;
+}
+
+.hero-college {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(.8rem, 1.5vw, 1.1rem);
+  color: var(--gold);
+  letter-spacing: .3em;
+  text-transform: uppercase;
+}
+
+.hero-date {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.hero-date-item {
+  text-align: center;
+}
+
+.hero-date-num {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 2rem;
+  color: var(--gold);
+  display: block;
+}
+
+.hero-date-label {
+  font-size: .7rem;
+  letter-spacing: .2em;
+  color: rgba(255, 255, 255, .5);
+  text-transform: uppercase;
+}
+
+.hero-date-sep {
+  color: rgba(244, 196, 48, .3);
+  font-size: 2rem;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}

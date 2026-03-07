@@ -1,0 +1,50 @@
+/* ===================================================
+   Home Page Unified Background Wrapper
+   =================================================== */
+
+.home-page-bg {
+	/* Rich, dark, flowing gradient connecting the sections */
+	background: linear-gradient(180deg,
+			#0A0800 0%,
+			#1A1400 10%,
+			#0A0800 45%,
+			#201800 55%,
+			#0F0C00 100%);
+	position: relative;
+	overflow: hidden;
+	/* contain the glowing orbs */
+	width: 100%;
+}
+
+/* Subtle, large glowing orbs to add depth */
+.home-page-bg::before,
+.home-page-bg::after {
+	content: '';
+	position: absolute;
+	width: 800px;
+	height: 800px;
+	border-radius: 50%;
+	filter: blur(140px);
+	z-index: 0;
+	pointer-events: none;
+	opacity: 0.12;
+	/* very subtle */
+}
+
+.home-page-bg::before {
+	top: 15%;
+	left: -350px;
+	background: radial-gradient(circle, var(--gold), transparent 70%);
+}
+
+.home-page-bg::after {
+	top: 65%;
+	right: -350px;
+	background: radial-gradient(circle, var(--gold-dark), transparent 70%);
+}
+
+/* Ensure children (the sections) are above the pseudo-element backgrounds */
+.home-page-bg>* {
+	position: relative;
+	z-index: 1;
+}
