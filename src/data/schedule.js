@@ -10,7 +10,7 @@ export const SCHEDULE = [
 
   {time: '1:30 PM', name: "HUG's for Bug (Code Debugging)", venue: 'CSE Lab - I', tag: 'Technical'},
   {time: '1:35 PM', name: 'Prompt Battle', venue: 'CSE Lab - II', tag: 'Technical'},
-  {time: '1:40 PM', name: 'Knowledge Clash (Quiz)', venue: 'FX Main Auditorium', tag: 'Technical'},
+  {time: '1:40 PM', name: 'Brain Byte Quiz', venue: 'FX Main Auditorium', tag: 'Technical'},
 
   {time: '3:00 PM', name: 'Prize Distribution & Valediction', venue: 'FX Main Auditorium', tag: 'ALL'},
 
