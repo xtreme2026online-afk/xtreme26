@@ -8,7 +8,7 @@ import Button from '../components/Button';
 import '../styles/register.css';
 
 const SHEET_URL =
-  'https://script.google.com/macros/s/AKfycbzUGBuT7yJYreBoNaem7TPUZDZcCAN_zz6dnelOGfbwcsqJKLiWK67a23ThFV0OogfM/exec';
+  'https://script.google.com/macros/s/AKfycbxoJZ2sZio-_oziI-eY3vizSHbZv3nLXzNhJJeBtt9bUfoGmodcgy_ZzaJn0pUQpNHr/exec';
 const GOOGLE_FORM_URL =
   'https://docs.google.com/forms/d/e/1FAIpQLSeTvUvfrr12fZi2AXQSTEEXEw2-hb7HdqLxB8Qpc1VZhDrc-g/viewform?usp=header';
 
@@ -21,6 +21,10 @@ const GROUP_B = EVENTS.slice(3, 6); // Events 4-6
 
 function isTeamEvent(ev) {
   return ev && ev.size !== '1';
+}
+
+function isPaperEvent(ev) {
+  return ev && ev.id === 1; // 1 is Innovators Forum
 }
 
 // ── EventPreview chip ───────────────────────────────────────────────
@@ -63,9 +67,13 @@ function StepIndicator({ step, total }) {
 }
 
 // ── Group Selector ──────────────────────────────────────────────────
-function GroupSelector({ label, badge, group, selected, teamName, onEvent, onTeam }) {
+function GroupSelector({
+  label, badge, group, selected, teamName, onEvent, onTeam,
+  paperTitle, onPaperTitle, paperAbstract, onPaperAbstract, paperFile, onPaperFile
+}) {
   const ev = group.find((e) => e.title === selected) || null;
   const needsTeam = isTeamEvent(ev);
+  const isPaper = isPaperEvent(ev);
 
   return (
     <div className="event-group-card">
@@ -103,6 +111,56 @@ function GroupSelector({ label, badge, group, selected, teamName, onEvent, onTea
           <p className="form-hint">Each member registers individually with the same team name.</p>
         </div>
       )}
+
+      {isPaper && (
+        <div className="paper-presentation-fields" style={{ marginTop: needsTeam ? '1rem' : 0 }}>
+          <div className="form-group">
+            <label className="form-label">Paper Title <span>*</span></label>
+            <input
+              className="form-input"
+              value={paperTitle}
+              onChange={(e) => onPaperTitle(e.target.value)}
+              placeholder="Enter your paper title"
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Abstract <span>*</span></label>
+            <textarea
+              className="form-input"
+              value={paperAbstract}
+              onChange={(e) => onPaperAbstract(e.target.value)}
+              placeholder="Short abstract of your paper"
+              rows={3}
+            />
+          </div>
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label className="form-label">Upload Document (.pdf, .doc, .docx) <span>*</span></label>
+            <p className="form-hint" style={{ color: '#fbbf24', marginTop: '0.2rem', marginBottom: '0.6rem', fontSize: '0.85rem' }}>
+              ⚠️ Please ensure your document contains the <strong>Title</strong> and <strong>Abstract</strong> at the beginning.
+            </p>
+            <input
+              className="form-input"
+              type="file"
+              accept=".pdf,.doc,.docx"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    const base64Data = reader.result.split(',')[1];
+                    onPaperFile({ name: file.name, type: file.type, data: base64Data });
+                  };
+                  reader.readAsDataURL(file);
+                } else {
+                  onPaperFile(null);
+                }
+              }}
+              style={{ padding: '0.6rem' }}
+            />
+            {paperFile && <p className="form-hint" style={{ color: '#a0aec0' }}>Selected: {paperFile.name}</p>}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -122,8 +180,15 @@ export default function RegisterPage() {
   // Step 2 — two event groups
   const [eventA, setEventA] = useState('');
   const [teamNameA, setTeamNameA] = useState('');
+  const [paperTitleA, setPaperTitleA] = useState('');
+  const [paperAbstractA, setPaperAbstractA] = useState('');
+  const [paperFileA, setPaperFileA] = useState(null);
+
   const [eventB, setEventB] = useState('');
   const [teamNameB, setTeamNameB] = useState('');
+  const [paperTitleB, setPaperTitleB] = useState('');
+  const [paperAbstractB, setPaperAbstractB] = useState('');
+  const [paperFileB, setPaperFileB] = useState(null);
 
   // Step 3 — payment
   const [transactionId, setTransactionId] = useState('');
@@ -163,6 +228,15 @@ export default function RegisterPage() {
       return { ok: false, msg: 'Please enter a team name for the Group A event.' };
     if (eventB && isTeamEvent(evObjB) && !teamNameB.trim())
       return { ok: false, msg: 'Please enter a team name for the Group B event.' };
+    // If paper event chosen, title, abstract and file are required
+    if (eventA && isPaperEvent(evObjA)) {
+      if (!paperTitleA.trim() || !paperAbstractA.trim() || !paperFileA)
+        return { ok: false, msg: 'Please provide Title, Abstract, and File for Group A paper presentation.' };
+    }
+    if (eventB && isPaperEvent(evObjB)) {
+      if (!paperTitleB.trim() || !paperAbstractB.trim() || !paperFileB)
+        return { ok: false, msg: 'Please provide Title, Abstract, and File for Group B paper presentation.' };
+    }
     return { ok: true };
   };
 
@@ -183,9 +257,19 @@ export default function RegisterPage() {
       event1: eventA || '',
       event1Type: evObjA ? (isTeamEvent(evObjA) ? 'Team' : 'Individual') : '',
       teamName1: teamNameA || '',
+      paperTitle1: paperTitleA || '',
+      paperAbstract1: paperAbstractA || '',
+      paperFile1Data: paperFileA ? paperFileA.data : '',
+      paperFile1Name: paperFileA ? paperFileA.name : '',
+      paperFile1MimeType: paperFileA ? paperFileA.type : '',
       event2: eventB || '',
       event2Type: evObjB ? (isTeamEvent(evObjB) ? 'Team' : 'Individual') : '',
       teamName2: teamNameB || '',
+      paperTitle2: paperTitleB || '',
+      paperAbstract2: paperAbstractB || '',
+      paperFile2Data: paperFileB ? paperFileB.data : '',
+      paperFile2Name: paperFileB ? paperFileB.name : '',
+      paperFile2MimeType: paperFileB ? paperFileB.type : '',
       eventsSelected,
       transactionId,
     };
@@ -288,6 +372,12 @@ export default function RegisterPage() {
               teamName={teamNameA}
               onEvent={setEventA}
               onTeam={setTeamNameA}
+              paperTitle={paperTitleA}
+              onPaperTitle={setPaperTitleA}
+              paperAbstract={paperAbstractA}
+              onPaperAbstract={setPaperAbstractA}
+              paperFile={paperFileA}
+              onPaperFile={setPaperFileA}
             />
 
             <div className="event-group-or">
@@ -302,6 +392,12 @@ export default function RegisterPage() {
               teamName={teamNameB}
               onEvent={setEventB}
               onTeam={setTeamNameB}
+              paperTitle={paperTitleB}
+              onPaperTitle={setPaperTitleB}
+              paperAbstract={paperAbstractB}
+              onPaperAbstract={setPaperAbstractB}
+              paperFile={paperFileB}
+              onPaperFile={setPaperFileB}
             />
 
             {(eventA || eventB) && (
@@ -380,8 +476,14 @@ export default function RegisterPage() {
               {[
                 eventA ? ['Group A Event', eventA] : null,
                 eventA && isTeamEvent(evObjA) ? ['Team Name (A)', teamNameA] : null,
+                eventA && isPaperEvent(evObjA) ? ['Paper Title (A)', paperTitleA] : null,
+                eventA && isPaperEvent(evObjA) ? ['Paper Abstract (A)', paperAbstractA] : null,
+                eventA && isPaperEvent(evObjA) && paperFileA ? ['Paper File (A)', paperFileA.name] : null,
                 eventB ? ['Group B Event', eventB] : null,
                 eventB && isTeamEvent(evObjB) ? ['Team Name (B)', teamNameB] : null,
+                eventB && isPaperEvent(evObjB) ? ['Paper Title (B)', paperTitleB] : null,
+                eventB && isPaperEvent(evObjB) ? ['Paper Abstract (B)', paperAbstractB] : null,
+                eventB && isPaperEvent(evObjB) && paperFileB ? ['Paper File (B)', paperFileB.name] : null,
                 ['Transaction ID', transactionId],
               ]
                 .filter(Boolean)
