@@ -28,12 +28,14 @@ export default function App() {
         <main>
           <Routes>
             <Route path='/' element={<HomePage />} />
-            <Route path='/events' element={<EventsPage />} />
 
+            <Route path='/events' element={<EventsPage />} />
             <Route path='/staff' element={<StaffPage />} />
             <Route path='/venue' element={<VenuePage />} />
             <Route path='/register' element={<RegisterPage />} />
             <Route path='/success' element={<SuccessPage />} />
+
+            <Route path='*' element={<HomePage />} />
           </Routes>
         </main>
         <Footer />
