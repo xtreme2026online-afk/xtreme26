@@ -2,7 +2,7 @@ import React, {useRef, useState} from 'react';
 import '../styles/about.css';
 
 /* ── change this path to your actual college promo video ── */
-const COLLEGE_VIDEO = '/videos/fx-promo.webm';
+const COLLEGE_VIDEO = 'https://res.cloudinary.com/dndkviye8/video/upload/v1773046858/fx-promo_xfcuoi.webm';
 
 const FEATURES = [
   ['🎓', 'NBA & NAAC Accredited Institution'],
