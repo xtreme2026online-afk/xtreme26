@@ -1,26 +1,14 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../styles/loading.css';
 
-const STATUSES = ['Initializing...', 'Loading...', 'Almost Ready...', 'Welcome!!!'];
+const STATUSES = ['Initializing...', 'Loading assets...', 'Almost there...', '🚀 Launching!'];
 
-const QR_PATTERN = [
-  [1, 1, 1, 1, 1, 1, 1, 0, 1, 0],
-  [1, 0, 0, 0, 0, 0, 1, 0, 0, 1],
-  [1, 0, 1, 1, 1, 0, 1, 0, 1, 0],
-  [1, 0, 1, 1, 1, 0, 1, 0, 0, 1],
-  [1, 0, 1, 1, 1, 0, 1, 0, 1, 1],
-  [1, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-  [1, 1, 1, 1, 1, 1, 1, 0, 1, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 1, 1, 0, 1, 1, 0, 1, 0],
-  [0, 1, 0, 0, 1, 0, 0, 1, 0, 1],
-];
-
-export default function LoadingScreen({onDone}) {
+export default function LoadingScreen({ onDone }) {
   const [progress, setProgress] = useState(0);
   const [statusIdx, setStatusIdx] = useState(0);
   const [hidden, setHidden] = useState(false);
   const [flash, setFlash] = useState(false);
+  const [complete, setComplete] = useState(false);
   const particlesRef = useRef(null);
   const startRef = useRef(null);
   const rafRef = useRef(null);
@@ -31,7 +19,7 @@ export default function LoadingScreen({onDone}) {
     const container = particlesRef.current;
     if (!container) return;
     const colors = ['#F4C430', '#FFD700', '#C9A227', '#FFF3C4'];
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < 30; i++) {
       const el = document.createElement('div');
       el.className = 'loader-particle';
       const size = Math.random() * 5 + 2;
@@ -51,7 +39,6 @@ export default function LoadingScreen({onDone}) {
   // Progress animation
   useEffect(() => {
     document.body.classList.add('loading-active');
-
     const ease = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
 
     const step = (ts) => {
@@ -64,20 +51,25 @@ export default function LoadingScreen({onDone}) {
       if (raw < 1) {
         rafRef.current = requestAnimationFrame(step);
       } else {
+        // 100% — show complete state for 950ms before flash
         setProgress(100);
         setStatusIdx(STATUSES.length - 1);
-        setFlash(true);
+        setComplete(true);
         setTimeout(() => {
-          setHidden(true);
-          document.body.classList.remove('loading-active');
-          setTimeout(onDone, 100);
-        }, 700);
+          setFlash(true);
+          setTimeout(() => {
+            setHidden(true);
+            document.body.classList.remove('loading-active');
+            setTimeout(onDone, 100);
+          }, 700);
+        }, 950);
       }
     };
 
     const timer = setTimeout(() => {
       rafRef.current = requestAnimationFrame(step);
     }, 200);
+
     return () => {
       clearTimeout(timer);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -86,18 +78,27 @@ export default function LoadingScreen({onDone}) {
   }, [onDone]);
 
   return (
-    <div className={`loading-screen${hidden ? ' hidden' : ''}`}>
+    <div className={`loading-screen${hidden ? ' hidden' : ''}${complete ? ' complete' : ''}`}>
       <div className='loader-bg' />
       <div className='loader-grid' />
       <div className='loader-particles' ref={particlesRef} />
       <div className={`loader-flash${flash ? ' flash' : ''}`} />
 
-      {/* Rings */}
+      {/* Burst rings — appear at 100% */}
+      {complete && (
+        <div className='loader-burst-rings'>
+          <div className='burst-ring burst-ring-1' />
+          <div className='burst-ring burst-ring-2' />
+          <div className='burst-ring burst-ring-3' />
+        </div>
+      )}
+
+      {/* Orbiting rings */}
       <div className='loader-rings-wrap'>
         {[
-          {size: 220, dur: '12s', dir: 'normal', op: 1},
-          {size: 320, dur: '20s', dir: 'reverse', op: 0.5},
-          {size: 440, dur: '30s', dir: 'normal', op: 0.3},
+          { size: 220, dur: '12s', dir: 'normal', op: 1 },
+          { size: 320, dur: '20s', dir: 'reverse', op: 0.5 },
+          { size: 440, dur: '30s', dir: 'normal', op: 0.3 },
         ].map((r, i) => (
           <div
             key={i}
@@ -114,33 +115,46 @@ export default function LoadingScreen({onDone}) {
       </div>
 
       <div className='loader-content'>
-        {/* Emblem */}
-        <div className='loader-emblem'>
-          <span className='loader-xtreme-text'>XTREME</span>
-          <span className='loader-year-text'>2 0 2 6</span>
+        {/* Emblem — swaps content at 100% */}
+        <div className={`loader-emblem${complete ? ' complete' : ''}`}>
+          {complete ? (
+            <>
+              <span className='loader-complete-check'>✦</span>
+              <span className='loader-complete-label'>READY</span>
+            </>
+          ) : (
+            <>
+              <span className='loader-xtreme-text'>XTREME</span>
+              <span className='loader-year-text'>2 0 2 6</span>
+            </>
+          )}
         </div>
 
         {/* Titles */}
-        <div className='loader-title-wrap'>
+        <div className={`loader-title-wrap${complete ? ' complete' : ''}`}>
           <span className='loader-main-title'>XTREME &#x27;26</span>
-          <span className='loader-sub-title'>&ldquo;Where Innovation Converges&rdquo;</span>
+          {complete ? (
+            <span className='loader-launch-text'>🚀 Entering the Experience...</span>
+          ) : (
+            <span className='loader-sub-title'>&ldquo;Where Innovation Converges&rdquo;</span>
+          )}
         </div>
 
         {/* Progress */}
         <div className='loader-progress-wrap'>
           <div className='loader-progress-meta'>
             <div>
-              <div className='loader-percent'>{progress}%</div>
+              <div className={`loader-percent${complete ? ' complete' : ''}`}>{progress}%</div>
               <div className='loader-dots-row'>
-                <div className='loader-dot' />
-                <div className='loader-dot' />
-                <div className='loader-dot' />
+                <div className={`loader-dot${complete ? ' complete' : ''}`} />
+                <div className={`loader-dot${complete ? ' complete' : ''}`} />
+                <div className={`loader-dot${complete ? ' complete' : ''}`} />
               </div>
             </div>
             <div className='loader-status'>{STATUSES[statusIdx]}</div>
           </div>
           <div className='loader-bar-bg'>
-            <div className='loader-bar-fill' style={{width: `${progress}%`}}>
+            <div className='loader-bar-fill' style={{ width: `${progress}%` }}>
               <div className='loader-bar-glow' />
             </div>
           </div>
