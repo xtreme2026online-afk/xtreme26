@@ -13,16 +13,22 @@ export const STAFF = {
       profile: "https://res.cloudinary.com/dndkviye8/image/upload/v1773046759/harold_nwlttb.png",
     },
     {
+      name: "Dr. E. Manohar",
+      designation: "Associate Professor",
+      role: "Symposium Manager",
+      profile: "https://res.cloudinary.com/dndkviye8/image/upload/v1773046761/manohar_qin1uh.png",
+    },
+    {
       name: "Mr. K. Sivakumar",
       designation: "Asst. HOD & Professor",
-      role: "Symbosium Manager",
+      role: "Symposium Coordinator",
       profile: "https://res.cloudinary.com/dndkviye8/image/upload/v1773046761/sk_wtbmzo.png",
     },
     {
-      name: "Dr. E. Manohar",
+      name: "Mr. S. Malaiarsan",
       designation: "Associate Professor",
-      role: "Symbosium Coordinator",
-      profile: "https://res.cloudinary.com/dndkviye8/image/upload/v1773046761/manohar_qin1uh.png",
+      role: "Logistic Manager",
+      profile: "https://res.cloudinary.com/dndkviye8/image/upload/v1773050524/malai_arasan_ph3jhc.png",
     }
   ],
   "Student Coordinators": [
@@ -36,7 +42,7 @@ export const STAFF = {
       name: "Harrish M",
       designation: "Overall Coordinator",
       role: "",
-      profile: "https://res.cloudinary.com/dndkviye8/image/upload/v1773046760/harrish_kgwpxh.png",
+      profile: "https://res.cloudinary.com/dndkviye8/image/upload/v1773050690/harrish_gsppfn.png",
     },
     {
       name: "Sri Vallinayagam V S",
