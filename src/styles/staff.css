@@ -135,4 +135,22 @@
   .staff-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .staff-grid.leadership {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .staff-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .staff-grid.leadership {
+    grid-template-columns: 1fr;
+  }
+
+  .staff-card {
+    padding: 1.5rem 1rem;
+  }
 }

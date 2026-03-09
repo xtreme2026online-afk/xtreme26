@@ -1,365 +1,428 @@
-import React, {useState, useRef} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {useGSAP} from '@gsap/react';
+import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
-import {ScrollTrigger} from 'gsap/ScrollTrigger';
-import {EVENTS} from '../data/events';
-import ParticipantBlock from '../components/ParticipantBlock';
+import { EVENTS } from '../data/events';
 import QRCode from '../components/QRCode';
 import Button from '../components/Button';
 import '../styles/register.css';
 
-gsap.registerPlugin(ScrollTrigger);
+const SHEET_URL =
+  'https://script.google.com/macros/s/AKfycbzUGBuT7yJYreBoNaem7TPUZDZcCAN_zz6dnelOGfbwcsqJKLiWK67a23ThFV0OogfM/exec';
+const GOOGLE_FORM_URL =
+  'https://docs.google.com/forms/d/e/1FAIpQLSeTvUvfrr12fZi2AXQSTEEXEw2-hb7HdqLxB8Qpc1VZhDrc-g/viewform?usp=header';
 
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzUGBuT7yJYreBoNaem7TPUZDZcCAN_zz6dnelOGfbwcsqJKLiWK67a23ThFV0OogfM/exec';
-const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeTvUvfrr12fZi2AXQSTEEXEw2-hb7HdqLxB8Qpc1VZhDrc-g/viewform?usp=header';
+const YEAR_OPTIONS = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
+const STEP_LABELS = ['Details', 'Events', 'Payment', 'Submit'];
 
-const emptyMember = () => ({
-  name: '',
-  email: '',
-  phone: '',
-  college: '',
-  year: '',
-  dept: '',
-  rollNo: '',
-});
+// Split events into two groups of 3
+const GROUP_A = EVENTS.slice(0, 3); // Events 1-3
+const GROUP_B = EVENTS.slice(3, 6); // Events 4-6
 
-const STEP_LABELS = ['Details', 'Event', 'Payment', 'Submit'];
+function isTeamEvent(ev) {
+  return ev && ev.size !== '1';
+}
 
-// ── Step Indicator ────────────────────────────────────────────────
-function StepIndicator({step, total}) {
+// ── EventPreview chip ───────────────────────────────────────────────
+function EventPreview({ ev }) {
+  if (!ev) return null;
   return (
-    <div className='step-indicator'>
-      {Array.from({length: total}, (_, i) => (
+    <div className="event-preview">
+      <div className="event-preview-grid">
+        <span>📍 {ev.venue}</span>
+        {ev.time && <span>🕘 {ev.time}</span>}
+        <span>{ev.size === '1' ? '👤 Individual' : `👥 Team: ${ev.size} members`}</span>
+        {ev.prize && <span>🏆 Prize: {ev.prize}</span>}
+      </div>
+    </div>
+  );
+}
+
+// ── Step Indicator ──────────────────────────────────────────────────
+function StepIndicator({ step, total }) {
+  return (
+    <div className="step-indicator">
+      {Array.from({ length: total }, (_, i) => (
         <React.Fragment key={i}>
-          <div className='step-wrapper'>
+          <div className="step-wrapper">
             <div
-              className={`step-dot ${
-                step > i + 1 ? 'completed'
-                : step === i + 1 ? 'active'
-                : ''
-              }`}>
+              className={`step-dot ${step > i + 1 ? 'completed' : step === i + 1 ? 'active' : ''
+                }`}
+            >
               {step > i + 1 ? '✓' : i + 1}
             </div>
-            <span className='step-label'>{STEP_LABELS[i]}</span>
+            <span className="step-label">{STEP_LABELS[i]}</span>
           </div>
-          {i < total - 1 && <div className={`step-line${step > i + 1 ? ' completed' : ''}`} />}
+          {i < total - 1 && (
+            <div className={`step-line${step > i + 1 ? ' completed' : ''}`} />
+          )}
         </React.Fragment>
       ))}
     </div>
   );
 }
 
-// ── Main Page ─────────────────────────────────────────────────────
+// ── Group Selector ──────────────────────────────────────────────────
+function GroupSelector({ label, badge, group, selected, teamName, onEvent, onTeam }) {
+  const ev = group.find((e) => e.title === selected) || null;
+  const needsTeam = isTeamEvent(ev);
+
+  return (
+    <div className="event-group-card">
+      <div className="event-group-header">
+        <span className="event-group-badge">{badge}</span>
+        <span className="event-group-label">{label}</span>
+      </div>
+
+      <div className="form-group" style={{ marginBottom: needsTeam ? '1rem' : 0 }}>
+        <label className="form-label">Select Event <span style={{ color: 'rgba(255,255,255,.4)', fontFamily: 'Inter', fontSize: '.7rem', textTransform: 'none', letterSpacing: 0 }}>(optional if selecting from other group)</span></label>
+        <select
+          className="form-select"
+          value={selected}
+          onChange={(e) => { onEvent(e.target.value); onTeam(''); }}
+        >
+          <option value="">— Skip this group —</option>
+          {group.map((ev) => (
+            <option key={ev.id} value={ev.title}>
+              {ev.icon} {ev.title} {ev.size === '1' ? '(Individual)' : `(Team · ${ev.size})`}
+            </option>
+          ))}
+        </select>
+        <EventPreview ev={ev} />
+      </div>
+
+      {needsTeam && (
+        <div className="form-group" style={{ marginBottom: 0 }}>
+          <label className="form-label">Team Name <span>*</span></label>
+          <input
+            className="form-input"
+            value={teamName}
+            onChange={(e) => onTeam(e.target.value)}
+            placeholder="Enter your team name for this event"
+          />
+          <p className="form-hint">Each member registers individually with the same team name.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Main Page ────────────────────────────────────────────────────────
 export default function RegisterPage() {
   const navigate = useNavigate();
   const pageRef = useRef(null);
-
-  const [tab, setTab] = useState('individual');
   const [step, setStep] = useState(1);
+  const [submitting, setSubmitting] = useState(false);
 
-  const [primary, setPrimary] = useState(emptyMember());
-  const [members, setMembers] = useState([emptyMember()]);
-  const [teamName, setTeamName] = useState('');
-  const [selectedEvent, setSelectedEvent] = useState('');
+  // Step 1 — details
+  const [form, setForm] = useState({
+    name: '', email: '', phone: '', college: '', year: '', dept: '',
+  });
+
+  // Step 2 — two event groups
+  const [eventA, setEventA] = useState('');
+  const [teamNameA, setTeamNameA] = useState('');
+  const [eventB, setEventB] = useState('');
+  const [teamNameB, setTeamNameB] = useState('');
+
+  // Step 3 — payment
   const [transactionId, setTransactionId] = useState('');
-  const [screenshot, setScreenshot] = useState(null);
 
   useGSAP(
     () => {
       gsap.fromTo(
         '.section-tag, .section-title, .section-subtitle',
-        {opacity: 0, y: 30},
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.2,
-        },
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.2 },
       );
-
       gsap.fromTo(
         '.form-container',
-        {opacity: 0, y: 40},
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          delay: 0.4,
-        },
+        { opacity: 0, y: 40 },
+        { opacity: 1, y: 0, duration: 0.8, delay: 0.4 },
       );
     },
-    {scope: pageRef},
+    { scope: pageRef },
   );
 
-  const switchTab = (t) => {
-    setTab(t);
-    setStep(1);
-    setMembers([emptyMember()]);
-  };
+  const update = (field, val) => setForm((f) => ({ ...f, [field]: val }));
 
-  const updatePrimary = (field, val) => setPrimary((p) => ({...p, [field]: val}));
-  const updateMember = (idx, field, val) => {
-    setMembers((ms) => ms.map((m, i) => (i === idx ? {...m, [field]: val} : m)));
-  };
-  const addMember = () => setMembers((ms) => [...ms, emptyMember()]);
-  const removeMember = (idx) => setMembers((ms) => ms.filter((_, i) => i !== idx));
+  const evObjA = GROUP_A.find((e) => e.title === eventA) || null;
+  const evObjB = GROUP_B.find((e) => e.title === eventB) || null;
 
-  const eventObj = EVENTS.find((e) => e.title === selectedEvent);
-
+  // ── Validation ──────────────────────────────────────────────────
   const validateStep1 = () => {
-    const {name, email, phone, college, year, dept, rollNo} = primary;
-    return name && email && phone && college && year && dept && rollNo;
+    const { name, email, phone, college, year, dept } = form;
+    return name && email && phone && college && year && dept;
   };
 
+  const validateStep2 = () => {
+    // Must choose at least one event
+    if (!eventA && !eventB) return { ok: false, msg: 'Please select at least one event.' };
+    // If team event chosen, team name required
+    if (eventA && isTeamEvent(evObjA) && !teamNameA.trim())
+      return { ok: false, msg: 'Please enter a team name for the Group A event.' };
+    if (eventB && isTeamEvent(evObjB) && !teamNameB.trim())
+      return { ok: false, msg: 'Please enter a team name for the Group B event.' };
+    return { ok: true };
+  };
+
+  // ── Submit ──────────────────────────────────────────────────────
   const submitForm = async () => {
-    const allMembers = [{...primary}, ...members];
+    if (submitting) return;
+    setSubmitting(true);
+
+    const eventsSelected = [eventA, eventB].filter(Boolean).join(' | ');
     const payload = {
-      type: tab,
-      event: selectedEvent,
-      teamName: tab === 'team' ? teamName : '',
-      transactionId,
-      members: allMembers,
       timestamp: new Date().toISOString(),
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      college: form.college,
+      year: form.year,
+      dept: form.dept,
+      event1: eventA || '',
+      event1Type: evObjA ? (isTeamEvent(evObjA) ? 'Team' : 'Individual') : '',
+      teamName1: teamNameA || '',
+      event2: eventB || '',
+      event2Type: evObjB ? (isTeamEvent(evObjB) ? 'Team' : 'Individual') : '',
+      teamName2: teamNameB || '',
+      eventsSelected,
+      transactionId,
     };
+
     try {
       await fetch(SHEET_URL, {
         method: 'POST',
         mode: 'no-cors',
-        headers: {'Content-Type': 'text/plain;charset=utf-8'},
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload),
       });
-    } catch (_) {}
+    } catch (_) { }
     navigate('/success');
   };
 
+  const eventsLabel = () => {
+    const list = [eventA, eventB].filter(Boolean);
+    if (list.length === 0) return '—';
+    return list.join(' & ');
+  };
+
   return (
-    <div className='register-page' ref={pageRef}>
-      <div className='section-inner'>
-        <div className='section-tag'>Join The Competition</div>
-        <h2 className='section-title'>
-          Register for <em>XTREME 2026</em>
-        </h2>
-        <p className='section-subtitle'>March 27, 2026 · Complete your registration below. Limited seats!</p>
+    <div className="register-page" ref={pageRef}>
+      <div className="section-inner">
+        <div className="section-tag">Join The Competition</div>
+        <h2 className="section-title">Register for <em>XTREME 2026</em></h2>
+        <p className="section-subtitle">March 27, 2026 · Select up to 2 events. One ₹200 payment covers all.</p>
 
-        <div className='form-container'>
-          {/* Tabs */}
-          <div className='reg-tabs'>
-            <button className={`reg-tab${tab === 'individual' ? ' active' : ''}`} onClick={() => switchTab('individual')}>
-              👤 Individual
-            </button>
-            <button className={`reg-tab${tab === 'team' ? ' active' : ''}`} onClick={() => switchTab('team')}>
-              👥 Team Event
-            </button>
-          </div>
+        <div className="form-container">
           <StepIndicator step={step} total={4} />
-          {/* ── STEP 1: Primary Details ── */}
+
+          {/* ── STEP 1: Details ── */}
           <div className={`form-step${step === 1 ? ' active' : ''}`}>
-            <h3 className='form-step-title'>Step 1 — {tab === 'individual' ? 'Your Details' : 'Team Leader Details'}</h3>
-            <p className='form-step-hint'>{tab === 'team' ? 'You are the Team Leader. Additional members will be added in Step 2.' : 'Fill in your personal information below.'}</p>
-            <ParticipantBlock title={tab === 'team' ? '👑 Team Leader (You)' : '👤 Participant Details'} data={primary} onChange={updatePrimary} />
-            <div className='form-nav'>
+            <h3 className="form-step-title">Step 1 — Your Details</h3>
+            <p className="form-step-hint">Fill in your personal information below.</p>
+
+            <div className="form-group">
+              <label className="form-label">Full Name <span>*</span></label>
+              <input className="form-input" value={form.name}
+                onChange={(e) => update('name', e.target.value)} placeholder="Enter your full name" />
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label">Email <span>*</span></label>
+                <input className="form-input" type="email" value={form.email}
+                  onChange={(e) => update('email', e.target.value)} placeholder="you@example.com" />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Phone <span>*</span></label>
+                <input className="form-input" type="tel" value={form.phone}
+                  onChange={(e) => update('phone', e.target.value)} placeholder="+91 XXXXX XXXXX" />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">College Name <span>*</span></label>
+              <input className="form-input" value={form.college}
+                onChange={(e) => update('college', e.target.value)} placeholder="Enter your college name" />
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label">Year <span>*</span></label>
+                <select className="form-select" value={form.year}
+                  onChange={(e) => update('year', e.target.value)}>
+                  <option value="">Select year...</option>
+                  {YEAR_OPTIONS.map((y) => <option key={y} value={y}>{y}</option>)}
+                </select>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Department <span>*</span></label>
+                <input className="form-input" value={form.dept}
+                  onChange={(e) => update('dept', e.target.value)} placeholder="e.g. CSE, ECE, MECH" />
+              </div>
+            </div>
+
+            <div className="form-nav">
               <div />
-              <Button variant='primary' onClick={() => (validateStep1() ? setStep(2) : alert('Please fill all required fields including Roll Number'))}>
-                Next →
-              </Button>
+              <Button variant="primary" onClick={() => {
+                if (validateStep1()) setStep(2);
+                else alert('Please fill in all required fields.');
+              }}>Next →</Button>
             </div>
           </div>
-          {/* ── STEP 2: Event + Team Members ── */}
+
+          {/* ── STEP 2: Event Selection ── */}
           <div className={`form-step${step === 2 ? ' active' : ''}`}>
-            <h3 className='form-step-title'>Step 2 — Event Selection{tab === 'team' ? ' & Team Members' : ''}</h3>
+            <h3 className="form-step-title">Step 2 — Select Your Events</h3>
+            <p className="form-step-hint">
+              Choose <strong>one event from each group</strong> or just one — it's up to you.
+              One ₹200 fee covers both. Team events will ask for a team name.
+            </p>
 
-            {tab === 'team' && (
-              <div className='form-group'>
-                <label className='form-label'>
-                  Team Name <span>*</span>
-                </label>
-                <input className='form-input' value={teamName} onChange={(e) => setTeamName(e.target.value)} placeholder='Enter your team name' />
-              </div>
-            )}
+            <GroupSelector
+              label="Group A — Events 1 to 3"
+              badge="A"
+              group={GROUP_A}
+              selected={eventA}
+              teamName={teamNameA}
+              onEvent={setEventA}
+              onTeam={setTeamNameA}
+            />
 
-            <div className='form-group'>
-              <label className='form-label'>
-                Select Event <span>*</span>
-              </label>
-              <select className='form-select' value={selectedEvent} onChange={(e) => setSelectedEvent(e.target.value)}>
-                <option value=''>Choose an event...</option>
-                {EVENTS.map((ev) => (
-                  <option key={ev.id} value={ev.title}>
-                    {ev.icon} {ev.title} · Team: {ev.size}
-                  </option>
-                ))}
-              </select>
-              {eventObj && (
-                <div className='event-preview'>
-                  <div className='event-preview-grid'>
-                    <span>📍 {eventObj.venue}</span>
-                    {eventObj.time && <span>🕘 {eventObj.time}</span>}
-                    <span>👥 Team: {eventObj.size}</span>
-                    {eventObj.prize && <span>🏆 Prize: {eventObj.prize}</span>}
-                  </div>
-                </div>
-              )}
+            <div className="event-group-or">
+              <span>+</span>
             </div>
 
-            {tab === 'team' && (
-              <div style={{marginTop: '1.5rem'}}>
-                <div className='team-members-heading'>Team Members (other than Team Leader)</div>
-                {members.map((m, i) => (
-                  <ParticipantBlock
-                    key={i}
-                    title={`👤 Member ${i + 2}`}
-                    data={m}
-                    onChange={(field, val) => updateMember(i, field, val)}
-                    removable={members.length > 1}
-                    onRemove={() => removeMember(i)}
-                  />
-                ))}
-                {members.length < 2 && (
-                  <Button variant='secondary' className='add-member-btn' onClick={addMember}>
-                    + Add Another Member
-                  </Button>
-                )}
-                <p className='member-count-hint'>Maximum 3 members total (including team leader)</p>
+            <GroupSelector
+              label="Group B — Events 4 to 6"
+              badge="B"
+              group={GROUP_B}
+              selected={eventB}
+              teamName={teamNameB}
+              onEvent={setEventB}
+              onTeam={setTeamNameB}
+            />
+
+            {(eventA || eventB) && (
+              <div className="event-selection-summary">
+                ✅ Selected: <strong>{eventsLabel()}</strong>
               </div>
             )}
 
-            <div className='form-nav'>
-              <Button variant='secondary' onClick={() => setStep(1)}>
-                ← Back
-              </Button>
-              <Button
-                variant='primary'
-                onClick={() => {
-                  if (!selectedEvent) {
-                    alert('Please select an event');
-                    return;
-                  }
-                  if (tab === 'team' && !teamName) {
-                    alert('Please enter a team name');
-                    return;
-                  }
-                  setStep(3);
-                }}>
-                Next →
-              </Button>
+            <div className="form-nav">
+              <Button variant="secondary" onClick={() => setStep(1)}>← Back</Button>
+              <Button variant="primary" onClick={() => {
+                const { ok, msg } = validateStep2();
+                if (ok) setStep(3);
+                else alert(msg);
+              }}>Next →</Button>
             </div>
           </div>
+
           {/* ── STEP 3: Payment ── */}
           <div className={`form-step${step === 3 ? ' active' : ''}`}>
-            <h3 className='form-step-title'>Step 3 — Payment</h3>
+            <h3 className="form-step-title">Step 3 — Payment</h3>
 
-            <div className='payment-box'>
-              <div className='payment-label'>Registration Fee</div>
-              <div className='payment-amount'>{'₹100/team'}</div>
-              <p style={{fontSize: '.8rem', color: 'rgba(255,255,255,.4)', marginBottom: '1rem'}}>Scan the QR below to pay via GPay / PhonePe / Paytm</p>
-              <div className='payment-qr-wrap'>
-                <div className='payment-qr'>
-                  <QRCode />
-                </div>
+            <div className="payment-box">
+              <div className="payment-label">Registration Fee (all selected events)</div>
+              <div className="payment-amount">₹200</div>
+              <p style={{ fontSize: '.8rem', color: 'rgba(255,255,255,.4)', marginBottom: '1rem' }}>
+                Scan the QR below to pay via GPay / PhonePe / Paytm
+              </p>
+              <div className="payment-qr-wrap">
+                <div className="payment-qr"><QRCode /></div>
               </div>
-              <div className='payment-upi'>UPI ID: xtreme2026@sbibank</div>
-              <div className='payment-bank'>Name: Sri Karuna CSE Dept | Bank: SBI</div>
+              <div className="payment-upi">UPI ID: xtreme2026@sbibank</div>
+              <div className="payment-bank">Name: Sri Karuna CSE Dept | Bank: SBI</div>
             </div>
 
-            <div className='form-group'>
-              <label className='form-label'>
-                Transaction ID / UTR Number <span>*</span>
-              </label>
-              <input className='form-input' value={transactionId} onChange={(e) => setTransactionId(e.target.value)} placeholder='e.g., T2026032712345678' />
-              <p className='form-hint'>Find this in your payment app under transaction history</p>
+            <div className="form-group">
+              <label className="form-label">Transaction ID / UTR Number <span>*</span></label>
+              <input className="form-input" value={transactionId}
+                onChange={(e) => setTransactionId(e.target.value)}
+                placeholder="e.g., T2026032712345678" />
+              <p className="form-hint">Find this in your payment app under transaction history</p>
             </div>
 
-            <div className='form-group'>
-              <label className='form-label'>
-                Upload Payment Screenshot <span>*</span>
-              </label>
-              <div className='upload-zone' onClick={() => document.getElementById('ss-upload').click()}>
-                <span className='upload-icon'>📸</span>
-                <div className='upload-text'>{screenshot ? `✅ ${screenshot}` : 'Click to upload screenshot of payment'}</div>
-                <div className='upload-hint'>PNG, JPG accepted · Max 5MB</div>
-              </div>
-              <input id='ss-upload' type='file' accept='image/*' style={{display: 'none'}} onChange={(e) => setScreenshot(e.target.files[0]?.name || null)} />
-            </div>
-
-            <div className='form-nav'>
-              <Button variant='secondary' onClick={() => setStep(2)}>
-                ← Back
-              </Button>
-              <Button
-                variant='primary'
-                onClick={() => {
-                  if (!transactionId || !screenshot) {
-                    alert('Please enter Transaction ID and upload screenshot');
-                  } else {
-                    setStep(4);
-                  }
-                }}>
-                Next →
-              </Button>
+            <div className="form-nav">
+              <Button variant="secondary" onClick={() => setStep(2)}>← Back</Button>
+              <Button variant="primary" onClick={() => {
+                if (!transactionId) alert('Please enter your Transaction ID.');
+                else setStep(4);
+              }}>Next →</Button>
             </div>
           </div>
+
           {/* ── STEP 4: Review & Submit ── */}
           <div className={`form-step${step === 4 ? ' active' : ''}`}>
-            <h3 className='form-step-title'>Step 4 — Review &amp; Submit</h3>
+            <h3 className="form-step-title">Step 4 — Review &amp; Submit</h3>
 
-            {/* Summary */}
-            <div className='review-box'>
-              <div className='review-box-title'>Registration Summary</div>
+            <div className="review-box">
+              <div className="review-box-title">Participant Details</div>
               {[
-                ['Registration Type', tab === 'individual' ? 'Individual' : 'Team'],
-                ['Event', selectedEvent],
-                tab === 'team' ? ['Team Name', teamName] : null,
+                ['Full Name', form.name],
+                ['Email', form.email],
+                ['Phone', form.phone],
+                ['College', form.college],
+                ['Year', form.year],
+                ['Department', form.dept],
+              ].map(([label, val]) => (
+                <div key={label} className="review-row">
+                  <span className="review-label">{label}</span>
+                  <span className="review-value">{val || '—'}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="review-box">
+              <div className="review-box-title">Event Details</div>
+              {[
+                eventA ? ['Group A Event', eventA] : null,
+                eventA && isTeamEvent(evObjA) ? ['Team Name (A)', teamNameA] : null,
+                eventB ? ['Group B Event', eventB] : null,
+                eventB && isTeamEvent(evObjB) ? ['Team Name (B)', teamNameB] : null,
                 ['Transaction ID', transactionId],
-                ['Screenshot', screenshot],
               ]
                 .filter(Boolean)
                 .map(([label, val]) => (
-                  <div key={label} className='review-row'>
-                    <span className='review-label'>{label}</span>
-                    <span className='review-value'>{val || '—'}</span>
+                  <div key={label} className="review-row">
+                    <span className="review-label">{label}</span>
+                    <span className="review-value">{val || '—'}</span>
                   </div>
                 ))}
             </div>
 
-            {/* Participants */}
-            <div className='review-box'>
-              <div className='review-box-title'>Participants ({tab === 'team' ? 1 + members.length : 1})</div>
-              {[{...primary, label: tab === 'team' ? 'Team Leader' : 'Participant'}, ...(tab === 'team' ? members.map((m, i) => ({...m, label: `Member ${i + 2}`})) : [])].map(
-                (p, i) => (
-                  <div key={i} className='member-summary-item'>
-                    <div className='member-summary-role'>{p.label}</div>
-                    <div className='member-summary-name'>{p.name || '—'}</div>
-                    <div className='member-summary-meta'>
-                      {p.email} · {p.phone} · Roll: {p.rollNo}
-                    </div>
-                  </div>
-                ),
-              )}
+            <div className="confirm-notice">
+              ✅ By submitting, you confirm all information is accurate and agree to abide by all
+              event rules and regulations of XTREME 2026.
             </div>
 
-            <div className='confirm-notice'>
-              ✅ By submitting, you confirm all information is accurate and you agree to abide by all event rules and regulations of XTREME 2026.
+            <div className="form-nav">
+              <Button variant="secondary" onClick={() => setStep(3)} disabled={submitting}>← Back</Button>
+              <button
+                className="btn-primary btn-submit-lock"
+                onClick={submitForm}
+                disabled={submitting}
+                style={{
+                  opacity: submitting ? 0.65 : 1,
+                  cursor: submitting ? 'not-allowed' : 'pointer',
+                  pointerEvents: submitting ? 'none' : 'auto',
+                }}
+              >
+                <span>{submitting ? '⏳ Submitting...' : '🚀 Submit Registration'}</span>
+              </button>
             </div>
+          </div>
 
-            <div className='form-nav'>
-              <Button variant='secondary' onClick={() => setStep(3)}>
-                ← Back
-              </Button>
-              <Button variant='primary' onClick={submitForm}>
-                🚀 Submit Registration
-              </Button>
-            </div>
-          </div>{' '}
-          {/* End Step 4 */}
-          {/* Alternative: Google Form (Visible on all steps) */}
-          <div className='form-option-divider'>OR use Google Form</div>
-          <a className='google-form-btn' href={GOOGLE_FORM_URL} target='_blank' rel='noopener noreferrer'>
-            <svg width='20' height='20' viewBox='0 0 24 24'>
-              <path fill='#4285F4' d='M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z' />
-              <path fill='#34A853' d='M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z' />
-              <path fill='#FBBC05' d='M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z' />
-              <path fill='#EA4335' d='M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z' />
+          {/* ── Alternative: Google Form ── */}
+          <div className="form-option-divider">OR use Google Form</div>
+          <a className="google-form-btn" href={GOOGLE_FORM_URL} target="_blank" rel="noopener noreferrer">
+            <svg width="20" height="20" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
             </svg>
             Register via Google Form (Alternative)
           </a>
