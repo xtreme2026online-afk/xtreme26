@@ -328,6 +328,12 @@
   padding: 10px;
 }
 
+.payment-qr img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .qr-grid {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
