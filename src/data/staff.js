@@ -1,38 +1,104 @@
 export const STAFF = {
-  leadership: [
+  "leadership": [
     {
-      name: 'Dr. R. Krishnamurthy',
-      designation: 'Principal',
-      role: 'Administration',
-      profile: '/images/profile.png',
+      name: "Dr. V. Velmurugan",
+      designation: "Principal",
+      role: "Administrator",
+      profile: "/images/vel_murugan.png",
     },
     {
-      name: 'Dr. S. Rajalakshmi',
-      designation: 'Head of Department',
-      role: 'CSE Department',
-      profile: '/images/profile.png',
+      name: "Dr. Y. Harold Robinson",
+      designation: "Professor & HOD",
+      role: "CSE Department",
+      profile: "/images/harold.png",
     },
     {
-      name: 'Mrs. P. Nirmala',
-      designation: 'Symposium Coordinator',
-      role: 'CSE Department',
-      profile: '/images/profile.png',
+      name: "Mr. K. Sivakumar",
+      designation: "Asst. HOD & Professor",
+      role: "Symbosium Manager",
+      profile: "/images/sk.png",
+    },
+    {
+      name: "Dr. E. Manohar",
+      designation: "Associate Professor",
+      role: "Symbosium Coordinator",
+      profile: "/images/manohar.png",
+    }
+  ],
+  "Student Coordinators": [
+    {
+      name: "Palani Kumar V",
+      designation: "Chief Coordinator",
+      role: "",
+      profile: "/images/palani_kumar.png",
+    },
+    {
+      name: "Harrish M",
+      designation: "Overall Coordinator",
+      role: "",
+      profile: "/images/harrish.png",
+    },
+    {
+      name: "Sri Vallinayagam V S",
+      designation: "Event Coordinator",
+      role: "",
+      profile: "/images/sri_valli.png",
+    },
+    {
+      name: "Francis Johan M",
+      designation: "Technical Coordinator",
+      role: "",
+      profile: "/images/francis.png",
+    },
+    {
+      name: "Ameer Riyaz",
+      designation: "Media Coordinator",
+      role: "",
+      profile: "/images/ameer.png",
+    },
+    {
+      name: "Appadurai M",
+      designation: "PR Head",
+      role: "",
+      profile: "/images/appadurai.png",
+    },
+    {
+      name: "Iyyappan V G",
+      designation: "Volunteer Coordinator",
+      role: "",
+      profile: "/images/iyyappan.png",
     },
   ],
-  incharge: [
-    {name: 'Mr. K. Anbazhagan', designation: 'Staff In-Charge', role: 'Technical Events', profile: '/images/profile.png'},
-    {name: 'Mrs. S. Deepa', designation: 'Staff In-Charge', role: 'Non-Technical Events', profile: '/images/profile.png'},
-    {name: 'Mr. T. Murugan', designation: 'Staff In-Charge', role: 'Logistics', profile: '/images/profile.png'},
-    {name: 'Mrs. R. Kavitha', designation: 'Staff In-Charge', role: 'Registration', profile: '/images/profile.png'},
-  ],
-  student_coordinators: [
-    {name: 'Arjun S.', designation: 'Student Coordinator', role: 'Overall Coordinator', profile: '/images/profile.png'},
-    {name: 'Priya M.', designation: 'Student Coordinator', role: 'Technical Head', profile: '/images/profile.png'},
-    {name: 'Rahul K.', designation: 'Student Coordinator', role: 'Non-Tech Head', profile: '/images/profile.png'},
-    {name: 'Sneha V.', designation: 'Student Coordinator', role: 'Design Head', profile: '/images/profile.png'},
-    {name: 'Karthik R.', designation: 'Student Coordinator', role: 'Logistics Head', profile: '/images/profile.png'},
-    {name: 'Divya A.', designation: 'Student Coordinator', role: 'PR Head', profile: '/images/profile.png'},
-    {name: 'Mani S.', designation: 'Student Coordinator', role: 'Web Team', profile: '/images/profile.png'},
-    {name: 'Lakshmi B.', designation: 'Student Coordinator', role: 'Decoration', profile: '/images/profile.png'},
-  ],
+  "The Tech Grid": [
+    {
+      name: "Maria Antony Yokesh V",
+      designation: "Designing Head",
+      role: "",
+      profile: "/images/yogesh.png",
+    },
+    {
+      name: "Bala Subramanian S",
+      designation: "Designer",
+      role: "",
+      profile: "/images/bala.png",
+    },
+    {
+      name: "Kaja Sameer M",
+      designation: "Video Editor",
+      role: "",
+      profile: "/images/kaja.png",
+    },
+    {
+      name: "Juju Anselum J",
+      designation: "Developer",
+      role: "",
+      profile: "/images/juju.png",
+    },
+    {
+      name: "Karthick V M",
+      designation: "Developer",
+      role: "",
+      profile: "/images/karthick.png",
+    }
+  ]
 };

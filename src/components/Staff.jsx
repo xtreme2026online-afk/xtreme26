@@ -1,8 +1,8 @@
 import React from 'react';
-import {STAFF} from '../data/staff';
+import { STAFF } from '../data/staff';
 import '../styles/staff.css';
 
-function StaffCard({person, isLeadership = false}) {
+function StaffCard({ person, isLeadership = false }) {
   return (
     <div className={`staff-card${isLeadership ? ' leadership' : ''}`}>
       <div className={`staff-avatar${isLeadership ? ' leadership' : ''}`}>
@@ -25,35 +25,20 @@ export default function Staff() {
         </h2>
         <p className='section-subtitle animate-on-scroll'>Guided by experienced faculty and driven by passionate student leaders.</p>
 
-        {/* Leadership */}
-        <div className='staff-section-title animate-on-scroll'>Leadership</div>
-        <div className='staff-grid leadership'>
-          {STAFF.leadership.map((s, i) => (
-            <div key={i} className={`animate-on-scroll delay-${i + 1}`}>
-              <StaffCard person={s} isLeadership />
-            </div>
-          ))}
-        </div>
-
-        {/* Staff In-Charge */}
-        <div className='staff-section-title animate-on-scroll'>Staff In-Charge</div>
-        <div className='staff-grid'>
-          {STAFF.incharge.map((s, i) => (
-            <div key={i} className={`animate-on-scroll delay-${(i % 4) + 1}`}>
-              <StaffCard person={s} />
-            </div>
-          ))}
-        </div>
-
-        {/* Student Coordinators */}
-        <div className='staff-section-title animate-on-scroll'>Student Coordinators</div>
-        <div className='staff-grid'>
-          {STAFF.student_coordinators.map((s, i) => (
-            <div key={i} className={`animate-on-scroll delay-${(i % 5) + 1}`}>
-              <StaffCard person={s} />
-            </div>
-          ))}
-        </div>
+        {
+          (Object.keys(STAFF).map(k => (
+            <>
+              <div className='staff-section-title animate-on-scroll'>{k}</div>
+              <div className='staff-grid'>
+                {STAFF[k].map((s, i) => (
+                  <div key={i} className={`animate-on-scroll delay-${(i % 4) + 1}`}>
+                    <StaffCard person={s} />
+                  </div>
+                ))}
+              </div>
+            </>
+          )))
+        }
       </div>
     </section>
   );
