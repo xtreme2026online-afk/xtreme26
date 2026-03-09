@@ -279,17 +279,46 @@
 @media (max-width: 1024px) {
   .about-grid {
     grid-template-columns: 1fr;
+    gap: 3rem;
   }
 
   .about-img-wrap {
     order: -1;
   }
+
+  .about-stats {
+    position: static;
+    margin-top: 1.5rem;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-img-main {
+    height: 320px;
+  }
+
+  .about-content .section-tag {
+    justify-content: center;
+  }
+
+  .about-content .section-tag::before {
+    display: block;
+  }
 }
 
 @media (max-width: 480px) {
+  .about-img-main {
+    height: 260px;
+  }
+
   .about-stats {
     position: static;
-    margin-top: 2rem;
+    margin-top: 1rem;
     width: 100%;
+  }
+
+  .about-stat-num {
+    font-size: 1.4rem;
   }
 }

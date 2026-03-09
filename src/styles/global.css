@@ -429,3 +429,41 @@ section {
   padding: 1.2rem 3rem;
   font-size: 1rem !important;
 }
+
+/* ===== GLOBAL RESPONSIVE ===== */
+@media (max-width: 768px) {
+  section {
+    padding: 4rem 1.25rem;
+  }
+
+  .section-subtitle {
+    margin-bottom: 2.5rem;
+    font-size: 1rem;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: .85rem 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  section {
+    padding: 3rem 1rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.6rem, 7vw, 2.5rem);
+  }
+
+  .gold-divider {
+    width: 60px;
+    margin: 1rem auto;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: .75rem 1.5rem;
+    font-size: .78rem !important;
+  }
+}

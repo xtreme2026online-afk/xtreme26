@@ -10,11 +10,17 @@
   padding: 6rem 2rem 4rem;
   background: radial-gradient(ellipse at center, #1A1400 0%, #0A0800 60%, #000 100%);
 }
-.success-inner { max-width: 600px; width: 100%; }
+
+.success-inner {
+  max-width: 600px;
+  width: 100%;
+}
+
 .success-icon {
-  width: 100px; height: 100px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
-  background: rgba(244,196,48,.15);
+  background: rgba(244, 196, 48, .15);
   border: 2px solid var(--gold);
   display: flex;
   align-items: center;
@@ -23,6 +29,7 @@
   margin: 0 auto 2rem;
   animation: pulseGold 2s infinite;
 }
+
 .success-title {
   font-family: 'Cinzel Decorative', cursive;
   font-size: clamp(2rem, 5vw, 3.5rem);
@@ -30,14 +37,19 @@
   margin-bottom: 1rem;
   animation: textGlow 3s infinite;
 }
+
 .success-body {
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.2rem;
-  color: rgba(255,255,255,.6);
+  color: rgba(255, 255, 255, .6);
   max-width: 500px;
   margin: 0 auto 2rem;
 }
-.success-body strong { color: var(--gold); }
+
+.success-body strong {
+  color: var(--gold);
+}
+
 .whatsapp-btn {
   display: inline-flex;
   align-items: center;
@@ -53,11 +65,13 @@
   text-decoration: none;
   border-radius: 4px;
 }
+
 .whatsapp-btn:hover {
   background: #128C7E;
   transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(37,211,102,.3);
+  box-shadow: 0 15px 40px rgba(37, 211, 102, .3);
 }
+
 .success-actions {
   display: flex;
   gap: 1rem;
@@ -65,26 +79,50 @@
   flex-wrap: wrap;
   margin-top: 2rem;
 }
+
 .success-checklist {
   margin-top: 3rem;
   padding: 1.5rem;
-  background: rgba(244,196,48,.05);
-  border: 1px solid rgba(244,196,48,.15);
+  background: rgba(244, 196, 48, .05);
+  border: 1px solid rgba(244, 196, 48, .15);
   text-align: left;
 }
+
 .success-checklist-title {
   font-size: .7rem;
   letter-spacing: .2em;
-  color: rgba(244,196,48,.7);
+  color: rgba(244, 196, 48, .7);
   text-transform: uppercase;
   margin-bottom: .75rem;
   font-family: 'Cinzel', serif;
 }
+
 .success-checklist-item {
   display: flex;
   gap: .75rem;
   font-size: .8rem;
-  color: rgba(255,255,255,.6);
+  color: rgba(255, 255, 255, .6);
   margin-bottom: .5rem;
 }
-.success-checklist-num { color: var(--gold); flex-shrink: 0; }
+
+.success-checklist-num {
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .success-page {
+    padding: 5rem 1rem 3rem;
+  }
+
+  .success-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .success-actions .btn-primary,
+  .success-actions .btn-secondary {
+    width: 100%;
+    text-align: center;
+  }
+}

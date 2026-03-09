@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from 'react';
-import {Link, NavLink, useNavigate} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Button from './Button';
 import '../styles/navbar.css';
 
-const NAV_ITEMS = ['events', 'gallery', 'staff', 'venue'];
+const NAV_ITEMS = ['events', 'staff', 'venue'];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -26,7 +26,7 @@ export default function Navbar() {
           <ul className='nav-links'>
             {NAV_ITEMS.map((id) => (
               <li key={id}>
-                <NavLink to={`/${id}`} className={({isActive}) => (isActive ? 'active' : '')}>
+                <NavLink to={`/${id}`} className={({ isActive }) => (isActive ? 'active' : '')}>
                   {id.charAt(0).toUpperCase() + id.slice(1)}
                 </NavLink>
               </li>

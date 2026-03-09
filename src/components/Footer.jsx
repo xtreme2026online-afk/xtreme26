@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import '../styles/footer.css'
 
-const LINKS = ['about', 'events', 'gallery', 'staff', 'venue']
+const LINKS = ['about', 'events', 'staff', 'venue']
 
 export default function Footer() {
   const navigate = useNavigate()

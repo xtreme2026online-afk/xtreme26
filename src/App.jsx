@@ -7,7 +7,7 @@ import HomePage from './pages/HomePage';
 import RegisterPage from './pages/RegisterPage';
 import SuccessPage from './pages/SuccessPage';
 import EventsPage from './pages/EventsPage';
-import GalleryPage from './pages/GalleryPage';
+
 import StaffPage from './pages/StaffPage';
 import VenuePage from './pages/VenuePage';
 import './styles/app.css';
@@ -29,7 +29,7 @@ export default function App() {
           <Routes>
             <Route path='/' element={<HomePage />} />
             <Route path='/events' element={<EventsPage />} />
-            <Route path='/gallery' element={<GalleryPage />} />
+
             <Route path='/staff' element={<StaffPage />} />
             <Route path='/venue' element={<VenuePage />} />
             <Route path='/register' element={<RegisterPage />} />
