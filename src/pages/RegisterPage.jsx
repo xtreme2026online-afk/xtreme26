@@ -421,7 +421,7 @@ export default function RegisterPage() {
               <p style={{fontSize: '.8rem', color: 'rgba(255,255,255,.4)', marginBottom: '1rem'}}>Scan the QR below to pay via GPay / PhonePe / Paytm</p>
               <div className='payment-qr-wrap'>
                 <div className='payment-qr'>
-                  <QRCode />
+                  <img src='/images/gpay-qr.jpg' alt='GPay QR' />
                 </div>
               </div>
               <div className='payment-upi'>UPI ID: harrishmurugesan@okicici</div>
