@@ -4,9 +4,9 @@ import '../styles/venue.css';
 
 const VENUE_DETAILS = [
   ['📅', 'Date', 'March 27, 2026 (Friday)'],
-  ['⏰', 'Timing', '8:00 AM - 6:00 PM'],
+  ['⏰', 'Timing', '8:30 AM - 4:00 PM'],
   ['🚌', 'Nearest Bus Stop', 'Vanarapettai Bus Stand (100m)'],
-  ['🚂', 'Nearest Hospital', 'Cavery Hospital (200 m)'],
+  ['🚂', 'Nearest Hospital', 'Kauvery Hospital (200m)'],
 ];
 
 export default function Venue() {
@@ -25,9 +25,9 @@ export default function Venue() {
             <div className='venue-card-main'>
               <div className='venue-name'>Francis Xavier Engineering College</div>
               <p className='venue-address'>
-                National Highway 7A, Kayalpattinam Road,
+                103/G2, Bypass Road Vannarpettai,
                 <br />
-                Tirunelveli - 628 002, Tamil Nadu, India
+                Tirunelveli - 627 003, Tamil Nadu, India
               </p>
               <div className='venue-details'>
                 {VENUE_DETAILS.map(([icon, label, val]) => (

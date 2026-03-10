@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import '../styles/loading.css';
 
 const STATUSES = ['Initializing...', 'Loading assets...', 'Almost there...', '🚀 Launching!'];
 
-export default function LoadingScreen({ onDone }) {
+export default function LoadingScreen({onDone}) {
   const [progress, setProgress] = useState(0);
   const [statusIdx, setStatusIdx] = useState(0);
   const [hidden, setHidden] = useState(false);
@@ -12,7 +12,7 @@ export default function LoadingScreen({ onDone }) {
   const particlesRef = useRef(null);
   const startRef = useRef(null);
   const rafRef = useRef(null);
-  const DURATION = 5000;
+  const DURATION = 3000;
 
   // Particles
   useEffect(() => {
@@ -96,9 +96,9 @@ export default function LoadingScreen({ onDone }) {
       {/* Orbiting rings */}
       <div className='loader-rings-wrap'>
         {[
-          { size: 220, dur: '12s', dir: 'normal', op: 1 },
-          { size: 320, dur: '20s', dir: 'reverse', op: 0.5 },
-          { size: 440, dur: '30s', dir: 'normal', op: 0.3 },
+          {size: 220, dur: '12s', dir: 'normal', op: 1},
+          {size: 320, dur: '20s', dir: 'reverse', op: 0.5},
+          {size: 440, dur: '30s', dir: 'normal', op: 0.3},
         ].map((r, i) => (
           <div
             key={i}
@@ -117,27 +117,24 @@ export default function LoadingScreen({ onDone }) {
       <div className='loader-content'>
         {/* Emblem — swaps content at 100% */}
         <div className={`loader-emblem${complete ? ' complete' : ''}`}>
-          {complete ? (
+          {complete ?
             <>
               <span className='loader-complete-check'>✦</span>
               <span className='loader-complete-label'>READY</span>
             </>
-          ) : (
-            <>
+          : <>
               <span className='loader-xtreme-text'>XTREME</span>
               <span className='loader-year-text'>2 0 2 6</span>
             </>
-          )}
+          }
         </div>
 
         {/* Titles */}
         <div className={`loader-title-wrap${complete ? ' complete' : ''}`}>
           <span className='loader-main-title'>XTREME &#x27;26</span>
-          {complete ? (
+          {complete ?
             <span className='loader-launch-text'>🚀 Entering the Experience...</span>
-          ) : (
-            <span className='loader-sub-title'>&ldquo;Where Innovation Converges&rdquo;</span>
-          )}
+          : <span className='loader-sub-title'>&ldquo;Where Innovation Converges&rdquo;</span>}
         </div>
 
         {/* Progress */}
@@ -154,7 +151,7 @@ export default function LoadingScreen({ onDone }) {
             <div className='loader-status'>{STATUSES[statusIdx]}</div>
           </div>
           <div className='loader-bar-bg'>
-            <div className='loader-bar-fill' style={{ width: `${progress}%` }}>
+            <div className='loader-bar-fill' style={{width: `${progress}%`}}>
               <div className='loader-bar-glow' />
             </div>
           </div>

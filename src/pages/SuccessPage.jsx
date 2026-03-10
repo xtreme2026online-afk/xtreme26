@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import Button from '../components/Button';
 import '../styles/success.css';
 
-const WHATSAPP_LINK = 'https://chat.whatsapp.com/YOUR_WHATSAPP_GROUP_LINK';
+const WHATSAPP_LINK = 'https://chat.whatsapp.com/GaKURLFdzWRE07XRgew0Zp';
 
 const CHECKLIST = [
   'Check your email for confirmation within 24 hours',

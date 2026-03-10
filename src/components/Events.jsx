@@ -36,7 +36,7 @@ export default function Events() {
               <div className='event-card-header'>
                 <span className='event-card-icon'>{ev.icon}</span>
                 <div className='event-card-title'>{ev.title}</div>
-                <div className='event-card-tagline'>{ev.subtitle}</div>
+                <div className='event-card-tagline' dangerouslySetInnerHTML={{__html: ev.subtitle}}></div>
               </div>
 
               <div className='event-card-body'>
