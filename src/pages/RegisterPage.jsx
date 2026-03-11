@@ -175,16 +175,8 @@ export default function RegisterPage() {
 
   useGSAP(
     () => {
-      gsap.fromTo(
-        '.section-tag, .section-title, .section-subtitle, .inter-college-notice',
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.8, stagger: 0.2 },
-      );
-      gsap.fromTo(
-        '.form-container',
-        { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 0.8, delay: 0.4 },
-      );
+      gsap.fromTo('.section-tag, .section-title, .section-subtitle, .inter-college-notice', {opacity: 0, y: 30}, {opacity: 1, y: 0, duration: 0.8, stagger: 0.2});
+      gsap.fromTo('.form-container', {opacity: 0, y: 40}, {opacity: 1, y: 0, duration: 0.8, delay: 0.4});
     },
     {scope: pageRef},
   );
@@ -274,14 +266,18 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="register-page" ref={pageRef}>
-      <div className="section-inner">
-        <div className="section-tag">Join The Competition</div>
-        <h2 className="section-title">Register for <em>XTREME 2026</em></h2>
-        <p className="section-subtitle" style={{ marginBottom: '1.5rem' }}>March 27, 2026 · Select up to 2 events. One ₹200 payment covers all.</p>
+    <div className='register-page' ref={pageRef}>
+      <div className='section-inner'>
+        <div className='section-tag'>Join The Competition</div>
+        <h2 className='section-title'>
+          Register for <em>XTREME 2026</em>
+        </h2>
+        <p className='section-subtitle' style={{marginBottom: '1.5rem'}}>
+          March 27, 2026 · Select up to 2 events. One ₹200 payment covers all.
+        </p>
 
-        <div className="inter-college-notice">
-          <span>⚠️ Notice:</span> Inter-college students are not allowed.
+        <div className='inter-college-notice'>
+          <span>⚠️ Notice:</span> FXEC students are not allowed.
         </div>
 
         <div className='form-container'>
