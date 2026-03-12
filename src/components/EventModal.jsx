@@ -39,7 +39,7 @@ export default function EventModal({event, onClose}) {
             }}>
             {event.title}
           </div>
-          <div className='event-card-tagline'>{event.subtitle}</div>
+          <div className='event-card-tagline' dangerouslySetInnerHTML={{__html: event.subtitle}}></div>
         </div>
 
         <div className='modal-body'>
@@ -63,6 +63,17 @@ export default function EventModal({event, onClose}) {
                 </div>
               ))}
           </div>
+
+          {event.topics && (
+            <>
+              <div className='modal-section-title'>Suggested Topics</div>
+              <ul className='rules-list'>
+                {event.topics.map((topic, i) => (
+                  <li key={i}>{topic}</li>
+                ))}
+              </ul>
+            </>
+          )}
 
           <div className='modal-section-title'>Rules &amp; Regulations</div>
           <ol className='rules-list'>

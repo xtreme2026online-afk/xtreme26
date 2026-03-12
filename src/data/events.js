@@ -28,10 +28,17 @@ export const EVENTS = [
       'PAPERIX is a paper presentation event where participants showcase their research ideas, technical innovations, and problem-solving approaches through structured presentations.',
     rules: [
       'Each team can have maximum 2 participants',
-      'Participants must submit their research paper in PDF format before the deadline',
+      'Participants must submit their abstract and title before registration',
       'Presentation time: 8 minutes + 2 minutes for questions',
       'Participants must bring their presentation in PPT format on a pen drive',
       'Judges decision will be final and binding',
+    ],
+    topics: [
+      'AI Agents and Autonomous Systems - The next evolution of artificial intelligence.',
+      'Cybersecurity in the AI Era - Protecting systems from AI-powered cyber attacks.',
+      'AI in Smart Cities and Sustainable Development - Intelligent urban infrastructure.',
+      'Quantum Computing in Real-World Applications - Future of ultra-fast computing.',
+      'Metaverse Technology and Virtual Reality',
     ],
     venue: 'Fx-Main Auditorium',
     time: '10 Minutes',
