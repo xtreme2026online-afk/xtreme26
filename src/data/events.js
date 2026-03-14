@@ -133,12 +133,7 @@ export const EVENTS = [
     title: 'JAM',
     subtitle: '(Just A Minute) <br/> Think fast, speak flawlessly',
     description: 'JAM is a spontaneous speaking competition where participants must speak on a given topic for 60 seconds without hesitation, repetition, or deviation.',
-    rules: [
-      'Individual participation only',
-      'No hesitation, repetition, or deviation allowed',
-      'Topics will be given on the spot',
-      'Time limit: 1 Minute',
-    ],
+    rules: ['Individual participation only', 'No hesitation, repetition, or deviation allowed', 'Topics will be given on the spot', 'Time limit: 1 Minute'],
     venue: 'Seminar Hall',
     time: '1 Minute',
     size: '1',
@@ -152,11 +147,7 @@ export const EVENTS = [
     title: 'Cinematic Quiz',
     subtitle: 'Test your cinematic knowledge',
     description: 'A fun quiz testing your knowledge of movies, directors, actors, and iconic cinematic moments.',
-    rules: [
-      'Team of 2 members allowed',
-      'Multiple rounds covering different genres',
-      'No mobile phones allowed during the quiz'
-    ],
+    rules: ['Team of 2 members allowed', 'Multiple rounds covering different genres', 'No mobile phones allowed during the quiz'],
     venue: 'Auditorium',
     time: 'Multiple Rounds',
     size: '1-2',
@@ -170,16 +161,12 @@ export const EVENTS = [
     title: 'Logo Finder',
     subtitle: 'Identify the iconic brands',
     description: 'A fast-paced visual quiz where participants must identify company logos, brand marks, and product symbols from partial or obscured images.',
-    rules: [
-      'Individual or team of 2 members allowed',
-      'Quickest answer gets the points',
-      'Judges decision is final'
-    ],
+    rules: ['Individual or team of 2 members allowed', 'Quickest answer gets the points', 'Judges decision is final'],
     venue: 'Computer Lab',
     time: '30 Minutes',
     size: '1-2',
     prize: '',
     set: 'Set 3',
     category: 'Non-Technical',
-  }
+  },
 ];

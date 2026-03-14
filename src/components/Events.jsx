@@ -3,23 +3,28 @@ import {useNavigate} from 'react-router-dom';
 import {EVENTS} from '../data/events';
 import EventModal from './EventModal';
 import '../styles/events.css';
+import Button from './Button';
 
 export default function Events() {
   const [selected, setSelected] = useState(null);
   const [filter, setFilter] = useState('All');
+  // State to track which tab is active
+  const [activeTab, setActiveTab] = useState('technical');
   const navigate = useNavigate();
 
   // Initialize scroll animations
   useEffect(() => {
     const cards = document.querySelectorAll('.event-card.animate-on-scroll');
-    // Remove 'visible' first so the transition replays
+
+    // Reset classes to trigger the animation again
     cards.forEach((c) => c.classList.remove('visible'));
-    // Re-add 'visible' after a microtask so the browser picks up the class removal
+
     const id = setTimeout(() => {
       cards.forEach((c) => c.classList.add('visible'));
     }, 50);
+
     return () => clearTimeout(id);
-  }, [filter]);
+  }, [activeTab]); // Added activeTab as a dependency
 
   return (
     <section id='events'>
@@ -28,22 +33,20 @@ export default function Events() {
         <h2 className='section-title animate-on-scroll'>
           <em>Compete.</em> Create. Conquer.
         </h2>
-        <p className='section-subtitle animate-on-scroll'>Nine electrifying events across technical and non-technical domains — each designed to test your limits.</p>
+        <p className='section-subtitle animate-on-scroll'>Eight electrifying events across technical and non-technical domains — each designed to test your limits.</p>
 
-        <div className="events-filter animate-on-scroll">
-          {['All', 'Technical', 'Non-Technical'].map(cat => (
-            <button 
-              key={cat} 
-              className={`filter-btn ${filter === cat ? 'active' : ''}`}
-              onClick={() => setFilter(cat)}
-            >
-              {cat}
-            </button>
-          ))}
+        {/* Tab Switcher */}
+        <div className='tabs-container animate-on-scroll'>
+          <Button variant={activeTab === 'technical' ? 'primary' : 'secondary'} onClick={() => setActiveTab('technical')} size='sm'>
+            Technical
+          </Button>
+          <Button variant={activeTab === 'non-technical' ? 'primary' : 'secondary'} onClick={() => setActiveTab('non-technical')} size='sm'>
+            Non-Technical
+          </Button>
         </div>
 
         <div className='events-grid'>
-          {EVENTS.filter(ev => filter === 'All' || ev.category === filter).map((ev, i) => (
+          {EVENTS.filter((ev) => ev.category.toLowerCase() === activeTab).map((ev, i) => (
             <div key={ev.id} className={`event-card animate-on-scroll delay-${(i % 5) + 1}`}>
               <div className='event-card-glow' />
               <div className='event-card-header'>
