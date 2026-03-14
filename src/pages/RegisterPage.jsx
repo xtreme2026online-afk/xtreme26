@@ -1,8 +1,8 @@
-import React, {useState, useRef} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {useGSAP} from '@gsap/react';
+import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
-import {EVENTS} from '../data/events';
+import { EVENTS } from '../data/events';
 import Button from '../components/Button';
 import '../styles/register.css';
 
@@ -26,7 +26,7 @@ function isPaperEvent(ev) {
 }
 
 // ── EventPreview chip ───────────────────────────────────────────────
-function EventPreview({ev}) {
+function EventPreview({ ev }) {
   if (!ev) return null;
   return (
     <div className='event-preview'>
@@ -41,18 +41,17 @@ function EventPreview({ev}) {
 }
 
 // ── Step Indicator ──────────────────────────────────────────────────
-function StepIndicator({step, total}) {
+function StepIndicator({ step, total }) {
   return (
     <div className='step-indicator'>
-      {Array.from({length: total}, (_, i) => (
+      {Array.from({ length: total }, (_, i) => (
         <React.Fragment key={i}>
           <div className='step-wrapper'>
             <div
-              className={`step-dot ${
-                step > i + 1 ? 'completed'
-                : step === i + 1 ? 'active'
-                : ''
-              }`}>
+              className={`step-dot ${step > i + 1 ? 'completed'
+                  : step === i + 1 ? 'active'
+                    : ''
+                }`}>
               {step > i + 1 ? '✓' : i + 1}
             </div>
             <span className='step-label'>{STEP_LABELS[i]}</span>
@@ -65,7 +64,7 @@ function StepIndicator({step, total}) {
 }
 
 // ── Group Selector ──────────────────────────────────────────────────
-function GroupSelector({label, badge, group, selected, teamName, onEvent, onTeam, paperTitle, onPaperTitle, paperAbstract, onPaperAbstract, paperLink, onPaperLink}) {
+function GroupSelector({ label, badge, group, selected, teamName, onEvent, onTeam, paperTitle, onPaperTitle, paperAbstract, onPaperAbstract, paperLink, onPaperLink }) {
   const ev = group.find((e) => e.title === selected) || null;
   const needsTeam = isTeamEvent(ev);
   const isPaper = isPaperEvent(ev);
@@ -77,10 +76,10 @@ function GroupSelector({label, badge, group, selected, teamName, onEvent, onTeam
         <span className='event-group-label'>{label}</span>
       </div>
 
-      <div className='form-group' style={{marginBottom: needsTeam ? '1rem' : 0}}>
+      <div className='form-group' style={{ marginBottom: needsTeam ? '1rem' : 0 }}>
         <label className='form-label'>
           Select Event{' '}
-          <span style={{color: 'rgba(255,255,255,.4)', fontFamily: 'Inter', fontSize: '.7rem', textTransform: 'none', letterSpacing: 0}}>
+          <span style={{ color: 'rgba(255,255,255,.4)', fontFamily: 'Inter', fontSize: '.7rem', textTransform: 'none', letterSpacing: 0 }}>
             (optional if selecting from other group)
           </span>
         </label>
@@ -102,7 +101,7 @@ function GroupSelector({label, badge, group, selected, teamName, onEvent, onTeam
       </div>
 
       {needsTeam && (
-        <div className='form-group' style={{marginBottom: 0}}>
+        <div className='form-group' style={{ marginBottom: 0 }}>
           <label className='form-label'>
             Team Name <span>*</span>
           </label>
@@ -112,7 +111,7 @@ function GroupSelector({label, badge, group, selected, teamName, onEvent, onTeam
       )}
 
       {isPaper && (
-        <div className='paper-presentation-fields' style={{marginTop: needsTeam ? '1rem' : 0}}>
+        <div className='paper-presentation-fields' style={{ marginTop: needsTeam ? '1rem' : 0 }}>
           <div className='form-group'>
             <label className='form-label'>
               Paper Title <span>*</span>
@@ -125,11 +124,11 @@ function GroupSelector({label, badge, group, selected, teamName, onEvent, onTeam
             </label>
             <textarea className='form-input' value={paperAbstract} onChange={(e) => onPaperAbstract(e.target.value)} placeholder='Short abstract of your paper' rows={3} />
           </div>
-          <div className='form-group' style={{marginBottom: 0}}>
+          <div className='form-group' style={{ marginBottom: 0 }}>
             <label className='form-label'>
               Google Drive Link (Document/PDF) <span>*</span>
             </label>
-            <p className='form-hint' style={{color: '#fbbf24', marginTop: '0.2rem', marginBottom: '0.6rem', fontSize: '0.85rem'}}>
+            <p className='form-hint' style={{ color: '#fbbf24', marginTop: '0.2rem', marginBottom: '0.6rem', fontSize: '0.85rem' }}>
               ⚠️ Please upload your Word Doc or PDF containing the <strong>Title</strong> and <strong>Abstract</strong> to your Google Drive and share the link here with{' '}
               <strong>"Anyone with the link can view"</strong> option.
             </p>
@@ -183,21 +182,13 @@ export default function RegisterPage() {
 
   useGSAP(
     () => {
-      gsap.fromTo(
-        '.section-tag, .section-title, .section-subtitle, .inter-college-notice',
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.8, stagger: 0.2 },
-      );
-      gsap.fromTo(
-        '.form-container',
-        { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 0.8, delay: 0.4 },
-      );
+      gsap.fromTo('.section-tag, .section-title, .section-subtitle, .inter-college-notice', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.2 });
+      gsap.fromTo('.form-container', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, delay: 0.4 });
     },
-    {scope: pageRef},
+    { scope: pageRef },
   );
 
-  const update = (field, val) => setForm((f) => ({...f, [field]: val}));
+  const update = (field, val) => setForm((f) => ({ ...f, [field]: val }));
 
   const evObjA = SET_1.find((e) => e.title === eventA) || null;
   const evObjB = SET_2.find((e) => e.title === eventB) || null;
@@ -205,33 +196,33 @@ export default function RegisterPage() {
 
   // ── Validation ──────────────────────────────────────────────────
   const validateStep1 = () => {
-    const {name, email, phone, college, year, dept, foodPreference} = form;
+    const { name, email, phone, college, year, dept, foodPreference } = form;
     return name && email && phone && college && year && dept && foodPreference;
   };
 
   const validateStep2 = () => {
     // Must choose at least one event
-    if (!eventA && !eventB && !eventC) return {ok: false, msg: 'Please select at least one event.'};
-    
+    if (!eventA && !eventB && !eventC) return { ok: false, msg: 'Please select at least one event.' };
+
     // If team event chosen, team name required
-    if (eventA && isTeamEvent(evObjA) && !teamNameA.trim()) return {ok: false, msg: 'Please enter a team name for Set 1 event.'};
-    if (eventB && isTeamEvent(evObjB) && !teamNameB.trim()) return {ok: false, msg: 'Please enter a team name for Set 2 event.'};
-    if (eventC && isTeamEvent(evObjC) && !teamNameC.trim()) return {ok: false, msg: 'Please enter a team name for Set 3 event.'};
-    
+    if (eventA && isTeamEvent(evObjA) && !teamNameA.trim()) return { ok: false, msg: 'Please enter a team name for Set 1 event.' };
+    if (eventB && isTeamEvent(evObjB) && !teamNameB.trim()) return { ok: false, msg: 'Please enter a team name for Set 2 event.' };
+    if (eventC && isTeamEvent(evObjC) && !teamNameC.trim()) return { ok: false, msg: 'Please enter a team name for Set 3 event.' };
+
     // If paper event chosen, title, abstract and drive link are required
     if (eventA && isPaperEvent(evObjA)) {
       if (!paperTitleA.trim() || !paperAbstractA.trim() || !paperLinkA.trim())
-        return {ok: false, msg: 'Please provide Title, Abstract, and Drive Link for Set 1 paper presentation.'};
+        return { ok: false, msg: 'Please provide Title, Abstract, and Drive Link for Set 1 paper presentation.' };
     }
     if (eventB && isPaperEvent(evObjB)) {
       if (!paperTitleB.trim() || !paperAbstractB.trim() || !paperLinkB.trim())
-        return {ok: false, msg: 'Please provide Title, Abstract, and Drive Link for Set 2 paper presentation.'};
+        return { ok: false, msg: 'Please provide Title, Abstract, and Drive Link for Set 2 paper presentation.' };
     }
     if (eventC && isPaperEvent(evObjC)) {
       if (!paperTitleC.trim() || !paperAbstractC.trim() || !paperLinkC.trim())
-        return {ok: false, msg: 'Please provide Title, Abstract, and Drive Link for Set 3 paper presentation.'};
+        return { ok: false, msg: 'Please provide Title, Abstract, and Drive Link for Set 3 paper presentation.' };
     }
-    return {ok: true};
+    return { ok: true };
   };
 
   // ── Submit ──────────────────────────────────────────────────────
@@ -249,21 +240,21 @@ export default function RegisterPage() {
       year: form.year,
       dept: form.dept,
       foodPreference: form.foodPreference,
-      
+
       event1: eventA || '',
       event1Type: evObjA ? (isTeamEvent(evObjA) ? 'Team' : 'Individual') : '',
       teamName1: teamNameA || '',
       paperTitle1: paperTitleA || '',
       paperAbstract1: paperAbstractA || '',
       paperLink1: paperLinkA || '',
-      
+
       event2: eventB || '',
       event2Type: evObjB ? (isTeamEvent(evObjB) ? 'Team' : 'Individual') : '',
       teamName2: teamNameB || '',
       paperTitle2: paperTitleB || '',
       paperAbstract2: paperAbstractB || '',
       paperLink2: paperLinkB || '',
-      
+
       event3: eventC || '',
       event3Type: evObjC ? (isTeamEvent(evObjC) ? 'Team' : 'Individual') : '',
       teamName3: teamNameC || '',
@@ -279,10 +270,10 @@ export default function RegisterPage() {
       await fetch(SHEET_URL, {
         method: 'POST',
         mode: 'no-cors',
-        headers: {'Content-Type': 'text/plain;charset=utf-8'},
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload),
       });
-    } catch (_) {}
+    } catch (_) { }
     navigate('/success');
   };
 
@@ -299,8 +290,8 @@ export default function RegisterPage() {
         <h2 className="section-title">Register for <em>XTREME 2026</em></h2>
         <p className="section-subtitle" style={{ marginBottom: '1.5rem' }}>March 27, 2026 · Select up to 3 events. One ₹200 payment covers all.</p>
 
-        <div className="inter-college-notice">
-          <span>⚠️ Notice:</span> Inter-college students are not allowed.
+        <div className='inter-college-notice'>
+          <span>⚠️ Notice:</span> FXEC students are not allowed.
         </div>
 
         <div className='form-container'>
@@ -462,7 +453,7 @@ export default function RegisterPage() {
               <Button
                 variant='primary'
                 onClick={() => {
-                  const {ok, msg} = validateStep2();
+                  const { ok, msg } = validateStep2();
                   if (ok) setStep(3);
                   else alert(msg);
                 }}>
@@ -478,7 +469,7 @@ export default function RegisterPage() {
             <div className='payment-box'>
               <div className='payment-label'>Registration Fee (all selected events)</div>
               <div className='payment-amount'>Per Person ₹200</div>
-              <p style={{fontSize: '.8rem', color: 'rgba(255,255,255,.4)', marginBottom: '1rem'}}>Scan the QR below to pay via GPay / PhonePe / Paytm</p>
+              <p style={{ fontSize: '.8rem', color: 'rgba(255,255,255,.4)', marginBottom: '1rem' }}>Scan the QR below to pay via GPay / PhonePe / Paytm</p>
               <div className='payment-qr-wrap'>
                 <div className='payment-qr'>
                   <img src='/images/gpay-qr.jpg' alt='GPay QR' />
@@ -541,7 +532,7 @@ export default function RegisterPage() {
                 eventA && isPaperEvent(evObjA) ? ['Paper Title (1)', paperTitleA] : null,
                 eventA && isPaperEvent(evObjA) ? ['Paper Abstract (1)', paperAbstractA] : null,
                 eventA && isPaperEvent(evObjA) && paperLinkA ? ['Paper Link (1)', paperLinkA] : null,
-                
+
                 eventB ? ['Set 2 Event', eventB] : null,
                 eventB && isTeamEvent(evObjB) ? ['Team Name (2)', teamNameB] : null,
                 eventB && isPaperEvent(evObjB) ? ['Paper Title (2)', paperTitleB] : null,

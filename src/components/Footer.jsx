@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, useNavigate, useLocation} from 'react-router-dom';
+import {Link, useNavigate, useLocation, NavLink} from 'react-router-dom';
 import '../styles/footer.css';
 
 const LINKS = ['events', 'staff', 'venue'];
@@ -59,10 +59,10 @@ export default function Footer() {
           <ul className='footer-links'>
             {LINKS.map((id) => (
               <li key={id}>
-                <a onClick={() => scrollTo(id)}>
+                <NavLink to={`/${id}`} className={({isActive}) => (isActive ? 'active' : '')}>
                   <ArrowRightIcon />
                   {id.charAt(0).toUpperCase() + id.slice(1)}
-                </a>
+                </NavLink>
               </li>
             ))}
             <li>
