@@ -6,9 +6,10 @@ import '../styles/events.css';
 
 export default function Events() {
   const [selected, setSelected] = useState(null);
+  const [filter, setFilter] = useState('All');
   const navigate = useNavigate();
 
-  // Initialize scroll animations once
+  // Initialize scroll animations
   useEffect(() => {
     const cards = document.querySelectorAll('.event-card.animate-on-scroll');
     // Remove 'visible' first so the transition replays
@@ -18,7 +19,7 @@ export default function Events() {
       cards.forEach((c) => c.classList.add('visible'));
     }, 50);
     return () => clearTimeout(id);
-  }, []);
+  }, [filter]);
 
   return (
     <section id='events'>
@@ -27,10 +28,22 @@ export default function Events() {
         <h2 className='section-title animate-on-scroll'>
           <em>Compete.</em> Create. Conquer.
         </h2>
-        <p className='section-subtitle animate-on-scroll'>Eight electrifying events across technical and non-technical domains — each designed to test your limits.</p>
+        <p className='section-subtitle animate-on-scroll'>Nine electrifying events across technical and non-technical domains — each designed to test your limits.</p>
+
+        <div className="events-filter animate-on-scroll">
+          {['All', 'Technical', 'Non-Technical'].map(cat => (
+            <button 
+              key={cat} 
+              className={`filter-btn ${filter === cat ? 'active' : ''}`}
+              onClick={() => setFilter(cat)}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
 
         <div className='events-grid'>
-          {EVENTS.map((ev, i) => (
+          {EVENTS.filter(ev => filter === 'All' || ev.category === filter).map((ev, i) => (
             <div key={ev.id} className={`event-card animate-on-scroll delay-${(i % 5) + 1}`}>
               <div className='event-card-glow' />
               <div className='event-card-header'>

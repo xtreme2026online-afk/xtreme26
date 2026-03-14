@@ -12,16 +12,17 @@ const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeTvUvfrr12fZi
 const YEAR_OPTIONS = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
 const STEP_LABELS = ['Details', 'Events', 'Payment', 'Submit'];
 
-// Split events into two groups of 3
-const GROUP_A = EVENTS.slice(0, 3); // Events 1-3
-const GROUP_B = EVENTS.slice(3, 6); // Events 4-6
+// Split events into three sets corresponding to the updated event list
+const SET_1 = EVENTS.filter((ev) => ev.set === 'Set 1');
+const SET_2 = EVENTS.filter((ev) => ev.set === 'Set 2');
+const SET_3 = EVENTS.filter((ev) => ev.set === 'Set 3');
 
 function isTeamEvent(ev) {
   return ev && ev.size !== '1';
 }
 
 function isPaperEvent(ev) {
-  return ev && ev.id === 2; // 2 is Innovators Forum
+  return ev && ev.id === 1; // 1 is PAPERIX
 }
 
 // ── EventPreview chip ───────────────────────────────────────────────
@@ -155,9 +156,10 @@ export default function RegisterPage() {
     college: '',
     year: '',
     dept: '',
+    foodPreference: '',
   });
 
-  // Step 2 — two event groups
+  // Step 2 — three event groups
   const [eventA, setEventA] = useState('');
   const [teamNameA, setTeamNameA] = useState('');
   const [paperTitleA, setPaperTitleA] = useState('');
@@ -169,6 +171,12 @@ export default function RegisterPage() {
   const [paperTitleB, setPaperTitleB] = useState('');
   const [paperAbstractB, setPaperAbstractB] = useState('');
   const [paperLinkB, setPaperLinkB] = useState('');
+
+  const [eventC, setEventC] = useState('');
+  const [teamNameC, setTeamNameC] = useState('');
+  const [paperTitleC, setPaperTitleC] = useState('');
+  const [paperAbstractC, setPaperAbstractC] = useState('');
+  const [paperLinkC, setPaperLinkC] = useState('');
 
   // Step 3 — payment
   const [transactionId, setTransactionId] = useState('');
@@ -191,29 +199,37 @@ export default function RegisterPage() {
 
   const update = (field, val) => setForm((f) => ({...f, [field]: val}));
 
-  const evObjA = GROUP_A.find((e) => e.title === eventA) || null;
-  const evObjB = GROUP_B.find((e) => e.title === eventB) || null;
+  const evObjA = SET_1.find((e) => e.title === eventA) || null;
+  const evObjB = SET_2.find((e) => e.title === eventB) || null;
+  const evObjC = SET_3.find((e) => e.title === eventC) || null;
 
   // ── Validation ──────────────────────────────────────────────────
   const validateStep1 = () => {
-    const {name, email, phone, college, year, dept} = form;
-    return name && email && phone && college && year && dept;
+    const {name, email, phone, college, year, dept, foodPreference} = form;
+    return name && email && phone && college && year && dept && foodPreference;
   };
 
   const validateStep2 = () => {
     // Must choose at least one event
-    if (!eventA || !eventB) return {ok: false, msg: 'Please select at least two event.'};
+    if (!eventA && !eventB && !eventC) return {ok: false, msg: 'Please select at least one event.'};
+    
     // If team event chosen, team name required
-    if (eventA && isTeamEvent(evObjA) && !teamNameA.trim()) return {ok: false, msg: 'Please enter a team name for the Group A event.'};
-    if (eventB && isTeamEvent(evObjB) && !teamNameB.trim()) return {ok: false, msg: 'Please enter a team name for the Group B event.'};
+    if (eventA && isTeamEvent(evObjA) && !teamNameA.trim()) return {ok: false, msg: 'Please enter a team name for Set 1 event.'};
+    if (eventB && isTeamEvent(evObjB) && !teamNameB.trim()) return {ok: false, msg: 'Please enter a team name for Set 2 event.'};
+    if (eventC && isTeamEvent(evObjC) && !teamNameC.trim()) return {ok: false, msg: 'Please enter a team name for Set 3 event.'};
+    
     // If paper event chosen, title, abstract and drive link are required
     if (eventA && isPaperEvent(evObjA)) {
       if (!paperTitleA.trim() || !paperAbstractA.trim() || !paperLinkA.trim())
-        return {ok: false, msg: 'Please provide Title, Abstract, and Drive Link for Group A paper presentation.'};
+        return {ok: false, msg: 'Please provide Title, Abstract, and Drive Link for Set 1 paper presentation.'};
     }
     if (eventB && isPaperEvent(evObjB)) {
       if (!paperTitleB.trim() || !paperAbstractB.trim() || !paperLinkB.trim())
-        return {ok: false, msg: 'Please provide Title, Abstract, and Drive Link for Group B paper presentation.'};
+        return {ok: false, msg: 'Please provide Title, Abstract, and Drive Link for Set 2 paper presentation.'};
+    }
+    if (eventC && isPaperEvent(evObjC)) {
+      if (!paperTitleC.trim() || !paperAbstractC.trim() || !paperLinkC.trim())
+        return {ok: false, msg: 'Please provide Title, Abstract, and Drive Link for Set 3 paper presentation.'};
     }
     return {ok: true};
   };
@@ -223,7 +239,7 @@ export default function RegisterPage() {
     if (submitting) return;
     setSubmitting(true);
 
-    const eventsSelected = [eventA, eventB].filter(Boolean).join(' | ');
+    const eventsSelected = [eventA, eventB, eventC].filter(Boolean).join(' | ');
     const payload = {
       timestamp: new Date().toISOString(),
       name: form.name,
@@ -232,26 +248,29 @@ export default function RegisterPage() {
       college: form.college,
       year: form.year,
       dept: form.dept,
+      foodPreference: form.foodPreference,
+      
       event1: eventA || '',
-      event1Type:
-        evObjA ?
-          isTeamEvent(evObjA) ? 'Team'
-          : 'Individual'
-        : '',
+      event1Type: evObjA ? (isTeamEvent(evObjA) ? 'Team' : 'Individual') : '',
       teamName1: teamNameA || '',
       paperTitle1: paperTitleA || '',
       paperAbstract1: paperAbstractA || '',
       paperLink1: paperLinkA || '',
+      
       event2: eventB || '',
-      event2Type:
-        evObjB ?
-          isTeamEvent(evObjB) ? 'Team'
-          : 'Individual'
-        : '',
+      event2Type: evObjB ? (isTeamEvent(evObjB) ? 'Team' : 'Individual') : '',
       teamName2: teamNameB || '',
       paperTitle2: paperTitleB || '',
       paperAbstract2: paperAbstractB || '',
       paperLink2: paperLinkB || '',
+      
+      event3: eventC || '',
+      event3Type: evObjC ? (isTeamEvent(evObjC) ? 'Team' : 'Individual') : '',
+      teamName3: teamNameC || '',
+      paperTitle3: paperTitleC || '',
+      paperAbstract3: paperAbstractC || '',
+      paperLink3: paperLinkC || '',
+
       eventsSelected,
       transactionId,
     };
@@ -268,7 +287,7 @@ export default function RegisterPage() {
   };
 
   const eventsLabel = () => {
-    const list = [eventA, eventB].filter(Boolean);
+    const list = [eventA, eventB, eventC].filter(Boolean);
     if (list.length === 0) return '—';
     return list.join(' & ');
   };
@@ -278,7 +297,7 @@ export default function RegisterPage() {
       <div className="section-inner">
         <div className="section-tag">Join The Competition</div>
         <h2 className="section-title">Register for <em>XTREME 2026</em></h2>
-        <p className="section-subtitle" style={{ marginBottom: '1.5rem' }}>March 27, 2026 · Select up to 2 events. One ₹200 payment covers all.</p>
+        <p className="section-subtitle" style={{ marginBottom: '1.5rem' }}>March 27, 2026 · Select up to 3 events. One ₹200 payment covers all.</p>
 
         <div className="inter-college-notice">
           <span>⚠️ Notice:</span> Inter-college students are not allowed.
@@ -343,6 +362,17 @@ export default function RegisterPage() {
               </div>
             </div>
 
+            <div className='form-group'>
+              <label className='form-label'>
+                Food Preference <span>*</span>
+              </label>
+              <select className='form-select' value={form.foodPreference} onChange={(e) => update('foodPreference', e.target.value)}>
+                <option value=''>Select food preference...</option>
+                <option value='Veg'>Veg</option>
+                <option value='Non-Veg'>Non-Veg</option>
+              </select>
+            </div>
+
             <div className='form-nav'>
               <div />
               <Button
@@ -360,13 +390,13 @@ export default function RegisterPage() {
           <div className={`form-step${step === 2 ? ' active' : ''}`}>
             <h3 className='form-step-title'>Step 2 — Select Your Events</h3>
             <p className='form-step-hint'>
-              Choose <strong>one event from each group</strong> or just one — it's up to you. One ₹200 fee covers both. Team events will ask for a team name.
+              Choose <strong>one event from each group</strong> or just one — it's up to you. One ₹200 fee covers all. Team events will ask for a team name.
             </p>
 
             <GroupSelector
-              label='Group A — Events 1 to 3'
-              badge='A'
-              group={GROUP_A}
+              label='Set 1 — Technical Events'
+              badge='1'
+              group={SET_1}
               selected={eventA}
               teamName={teamNameA}
               onEvent={setEventA}
@@ -384,9 +414,9 @@ export default function RegisterPage() {
             </div>
 
             <GroupSelector
-              label='Group B — Events 4 to 6'
-              badge='B'
-              group={GROUP_B}
+              label='Set 2 — Technical Events'
+              badge='2'
+              group={SET_2}
               selected={eventB}
               teamName={teamNameB}
               onEvent={setEventB}
@@ -399,7 +429,27 @@ export default function RegisterPage() {
               onPaperLink={setPaperLinkB}
             />
 
-            {(eventA || eventB) && (
+            <div className='event-group-or'>
+              <span>+</span>
+            </div>
+
+            <GroupSelector
+              label='Set 3 — Non-Technical Events'
+              badge='3'
+              group={SET_3}
+              selected={eventC}
+              teamName={teamNameC}
+              onEvent={setEventC}
+              onTeam={setTeamNameC}
+              paperTitle={paperTitleC}
+              onPaperTitle={setPaperTitleC}
+              paperAbstract={paperAbstractC}
+              onPaperAbstract={setPaperAbstractC}
+              paperLink={paperLinkC}
+              onPaperLink={setPaperLinkC}
+            />
+
+            {(eventA || eventB || eventC) && (
               <div className='event-selection-summary'>
                 ✅ Selected: <strong>{eventsLabel()}</strong>
               </div>
@@ -474,6 +524,7 @@ export default function RegisterPage() {
                 ['College', form.college],
                 ['Year', form.year],
                 ['Department', form.dept],
+                ['Food Preference', form.foodPreference],
               ].map(([label, val]) => (
                 <div key={label} className='review-row'>
                   <span className='review-label'>{label}</span>
@@ -485,16 +536,23 @@ export default function RegisterPage() {
             <div className='review-box'>
               <div className='review-box-title'>Event Details</div>
               {[
-                eventA ? ['Group A Event', eventA] : null,
-                eventA && isTeamEvent(evObjA) ? ['Team Name (A)', teamNameA] : null,
-                eventA && isPaperEvent(evObjA) ? ['Paper Title (A)', paperTitleA] : null,
-                eventA && isPaperEvent(evObjA) ? ['Paper Abstract (A)', paperAbstractA] : null,
-                eventA && isPaperEvent(evObjA) && paperLinkA ? ['Paper Link (A)', paperLinkA] : null,
-                eventB ? ['Group B Event', eventB] : null,
-                eventB && isTeamEvent(evObjB) ? ['Team Name (B)', teamNameB] : null,
-                eventB && isPaperEvent(evObjB) ? ['Paper Title (B)', paperTitleB] : null,
-                eventB && isPaperEvent(evObjB) ? ['Paper Abstract (B)', paperAbstractB] : null,
-                eventB && isPaperEvent(evObjB) && paperLinkB ? ['Paper Link (B)', paperLinkB] : null,
+                eventA ? ['Set 1 Event', eventA] : null,
+                eventA && isTeamEvent(evObjA) ? ['Team Name (1)', teamNameA] : null,
+                eventA && isPaperEvent(evObjA) ? ['Paper Title (1)', paperTitleA] : null,
+                eventA && isPaperEvent(evObjA) ? ['Paper Abstract (1)', paperAbstractA] : null,
+                eventA && isPaperEvent(evObjA) && paperLinkA ? ['Paper Link (1)', paperLinkA] : null,
+                
+                eventB ? ['Set 2 Event', eventB] : null,
+                eventB && isTeamEvent(evObjB) ? ['Team Name (2)', teamNameB] : null,
+                eventB && isPaperEvent(evObjB) ? ['Paper Title (2)', paperTitleB] : null,
+                eventB && isPaperEvent(evObjB) ? ['Paper Abstract (2)', paperAbstractB] : null,
+                eventB && isPaperEvent(evObjB) && paperLinkB ? ['Paper Link (2)', paperLinkB] : null,
+
+                eventC ? ['Set 3 Event', eventC] : null,
+                eventC && isTeamEvent(evObjC) ? ['Team Name (3)', teamNameC] : null,
+                eventC && isPaperEvent(evObjC) ? ['Paper Title (3)', paperTitleC] : null,
+                eventC && isPaperEvent(evObjC) ? ['Paper Abstract (3)', paperAbstractC] : null,
+                eventC && isPaperEvent(evObjC) && paperLinkC ? ['Paper Link (3)', paperLinkC] : null,
                 ['Transaction ID', transactionId],
               ]
                 .filter(Boolean)
