@@ -204,7 +204,7 @@ export default function RegisterPage() {
   const validateStep2 = () => {
     // Must choose two events
     const selectedEvents = [eventA, eventB, eventC].filter(Boolean);
-    if (selectedEvents.length != 2) return {ok: false, msg: 'Please select two events.'};
+    if (selectedEvents.length < 2) return {ok: false, msg: 'Please select at least 2 events'};
 
     // If team event chosen, team name required
     if (eventA && isTeamEvent(evObjA) && !teamNameA.trim()) return {ok: false, msg: 'Please enter a team name for Set 1 event.'};
