@@ -66,7 +66,7 @@ export default function EventModal({event, onClose}) {
 
           {event.topics && (
             <>
-              <div className='modal-section-title'>Suggested Topics</div>
+              <div className='modal-section-title'>Topics</div>
               <ul className='rules-list'>
                 {event.topics.map((topic, i) => (
                   <li key={i}>{topic}</li>
