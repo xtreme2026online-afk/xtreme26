@@ -6,6 +6,13 @@ export const EVENTS = [
     subtitle: '( Paper Presentation ) <br/> Present your ideas, inspire innovation',
     description:
       'PAPERIX is a paper presentation event where participants showcase their research ideas, technical innovations, and problem-solving approaches through structured presentations.',
+    topics: [
+      'AI Agents and Autonomous Systems - The next evolution of artificial intelligence.',
+      'Cybersecurity in the AI Era - Protecting systems from AI-powered cyber attacks.',
+      'AI in Smart Cities and Sustainable Development - Intelligent urban infrastructure.',
+      'Quantum Computing in Real-World Applications - Future of ultra-fast computing.',
+      'Metaverse Technology and Virtual Reality',
+    ],
     rules: [
       'Each team can have maximum 2 participants',
       'Participants must submit their research paper in PDF format before the deadline',
