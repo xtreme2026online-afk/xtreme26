@@ -183,6 +183,6 @@ export const EVENTS = [
     prize: '',
     set: 'Set 3',
     category: 'Non-Technical',
-    isAvailable: true,
+    isAvailable: false,
   },
 ];
