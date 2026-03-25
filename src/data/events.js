@@ -26,6 +26,7 @@ export const EVENTS = [
     prize: '',
     set: 'Set 1',
     category: 'Technical',
+    isAvailable: true,
   },
   {
     id: 2,
@@ -48,6 +49,7 @@ export const EVENTS = [
     prize: '₹ 3000',
     set: 'Set 1',
     category: 'Technical',
+    isAvailable: true,
   },
   {
     id: 3,
@@ -69,6 +71,7 @@ export const EVENTS = [
     prize: '',
     set: 'Set 1',
     category: 'Technical',
+    isAvailable: true,
   },
   {
     id: 4,
@@ -91,6 +94,7 @@ export const EVENTS = [
     prize: '',
     set: 'Set 2',
     category: 'Technical',
+    isAvailable: true,
   },
   {
     id: 5,
@@ -112,6 +116,7 @@ export const EVENTS = [
     prize: '',
     set: 'Set 2',
     category: 'Technical',
+    isAvailable: true,
   },
   {
     id: 6,
@@ -133,6 +138,7 @@ export const EVENTS = [
     prize: '',
     set: 'Set 2',
     category: 'Technical',
+    isAvailable: true,
   },
   {
     id: 7,
@@ -147,6 +153,7 @@ export const EVENTS = [
     prize: '',
     set: 'Set 3',
     category: 'Non-Technical',
+    isAvailable: true,
   },
   {
     id: 8,
@@ -161,6 +168,7 @@ export const EVENTS = [
     prize: '',
     set: 'Set 3',
     category: 'Non-Technical',
+    isAvailable: false,
   },
   {
     id: 9,
@@ -175,5 +183,6 @@ export const EVENTS = [
     prize: '',
     set: 'Set 3',
     category: 'Non-Technical',
+    isAvailable: true,
   },
 ];

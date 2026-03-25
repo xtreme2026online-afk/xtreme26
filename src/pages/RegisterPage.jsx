@@ -93,8 +93,8 @@ function GroupSelector({label, badge, group, selected, teamName, onEvent, onTeam
           }}>
           <option value=''>— Skip this group —</option>
           {group.map((ev) => (
-            <option key={ev.id} value={ev.title}>
-              {ev.icon} {ev.title} {ev.size === '1' ? '(Individual)' : `(Team · ${ev.size})`}
+            <option key={ev.id} value={ev.title} disabled={!ev.isAvailable}>
+              {ev.icon} {ev.title} {ev.size === '1' ? '(Individual)' : `(Team · ${ev.size})`}{!ev.isAvailable ? ' - [NOT AVAILABLE]' : ''}
             </option>
           ))}
         </select>
@@ -224,12 +224,27 @@ export default function RegisterPage() {
       if (!paperTitleC.trim() || !paperAbstractC.trim() || !paperLinkC.trim())
         return {ok: false, msg: 'Please provide Title, Abstract, and Drive Link for Set 3 paper presentation.'};
     }
+    // Availability Check
+    if (eventA && evObjA && !evObjA.isAvailable) return {ok: false, msg: `The event "${eventA}" is no longer available.`};
+    if (eventB && evObjB && !evObjB.isAvailable) return {ok: false, msg: `The event "${eventB}" is no longer available.`};
+    if (eventC && evObjC && !evObjC.isAvailable) return {ok: false, msg: `The event "${eventC}" is no longer available.`};
+
     return {ok: true};
   };
 
   // ── Submit ──────────────────────────────────────────────────────
   const submitForm = async () => {
     if (submitting) return;
+
+    // Final security check for event availability
+    const selectedEvObjs = [evObjA, evObjB, evObjC].filter(Boolean);
+    const unavailableEvent = selectedEvObjs.find((ev) => !ev.isAvailable);
+    if (unavailableEvent) {
+      alert(`Error: The event "${unavailableEvent.title}" is no longer available. Please select another event.`);
+      setSubmitting(false);
+      return;
+    }
+
     setSubmitting(true);
 
     const eventsSelected = [eventA, eventB, eventC].filter(Boolean).join(' | ');
