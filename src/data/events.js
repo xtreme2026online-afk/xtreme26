@@ -116,7 +116,7 @@ export const EVENTS = [
     prize: '',
     set: 'Set 2',
     category: 'Technical',
-    isAvailable: true,
+    isAvailable: false,
   },
   {
     id: 6,
