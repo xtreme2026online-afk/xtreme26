@@ -9,6 +9,8 @@ import '../styles/register.css';
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxoJZ2sZio-_oziI-eY3vizSHbZv3nLXzNhJJeBtt9bUfoGmodcgy_ZzaJn0pUQpNHr/exec';
 const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeTvUvfrr12fZi2AXQSTEEXEw2-hb7HdqLxB8Qpc1VZhDrc-g/viewform?usp=header';
 
+const IS_REGISTRATION_CLOSED = true; // Toggle this to open/close registration
+
 const YEAR_OPTIONS = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
 const STEP_LABELS = ['Details', 'Events', 'Payment', 'Submit'];
 
@@ -142,6 +144,23 @@ function GroupSelector({label, badge, group, selected, teamName, onEvent, onTeam
   );
 }
 
+// ── Registration Closed Component ───────────────────────────────────
+function RegistrationClosed() {
+  return (
+    <div className='registration-closed-container'>
+      <span className='closed-icon'>🛑</span>
+      <h2 className='closed-title'>Registration Closed</h2>
+      <p className='closed-message'>
+        XTREME 26 registration is now <em>closed</em>.
+        <br />
+        <span style={{color: '#ff5050', fontWeight: 'bold', display: 'block', marginTop: '0.5rem'}}>No on-spot registration available.</span>
+        Wait for <strong>XTREME 27</strong> to join the next ultimate challenge!
+      </p>
+      <div className='closed-footer'>Thank you for your interest</div>
+    </div>
+  );
+}
+
 // ── Main Page ────────────────────────────────────────────────────────
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -159,7 +178,6 @@ export default function RegisterPage() {
     dept: '',
     foodPreference: '',
   });
-
   // Step 2 — three event groups
   const [eventA, setEventA] = useState('');
   const [teamNameA, setTeamNameA] = useState('');
@@ -329,7 +347,11 @@ export default function RegisterPage() {
         </div>
 
         <div className='form-container'>
-          <StepIndicator step={step} total={4} />
+          {IS_REGISTRATION_CLOSED ? (
+            <RegistrationClosed />
+          ) : (
+            <>
+              <StepIndicator step={step} total={4} />
 
           {/* ── STEP 1: Details ── */}
           <div className={`form-step${step === 1 ? ' active' : ''}`}>
@@ -620,8 +642,10 @@ export default function RegisterPage() {
             </svg>
             Register via Google Form (Alternative)
           </a>
-        </div>
-      </div>
+        </>
+      )}
     </div>
+  </div>
+</div>
   );
 }
