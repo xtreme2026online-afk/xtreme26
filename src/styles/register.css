@@ -694,3 +694,67 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Registration Closed ── */
+.registration-closed-container {
+  padding: 5rem 2rem;
+  text-align: center;
+  background: rgba(244, 196, 48, .02);
+  border: 1px solid rgba(244, 196, 48, .15);
+  border-radius: 4px;
+  max-width: 600px;
+  margin: 2rem auto;
+  backdrop-filter: blur(10px);
+  animation: fadeInUp 0.8s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.registration-closed-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.closed-icon {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+  display: block;
+  filter: drop-shadow(0 0 15px rgba(244, 196, 48, 0.3));
+}
+
+.closed-title {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 2.2rem;
+  color: var(--gold);
+  margin-bottom: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  line-height: 1.2;
+}
+
+.closed-message {
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.closed-message em {
+  color: var(--gold);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.closed-footer {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  color: rgba(244, 196, 48, 0.4);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
