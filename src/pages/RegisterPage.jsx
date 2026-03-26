@@ -94,7 +94,8 @@ function GroupSelector({label, badge, group, selected, teamName, onEvent, onTeam
           <option value=''>— Skip this group —</option>
           {group.map((ev) => (
             <option key={ev.id} value={ev.title} disabled={!ev.isAvailable}>
-              {ev.icon} {ev.title} {ev.size === '1' ? '(Individual)' : `(Team · ${ev.size})`}{!ev.isAvailable ? ' - [NOT AVAILABLE]' : ''}
+              {ev.icon} {ev.title} {ev.size === '1' ? '(Individual)' : `(Team · ${ev.size})`}
+              {!ev.isAvailable ? ' - [NOT AVAILABLE]' : ''}
             </option>
           ))}
         </select>
@@ -505,11 +506,11 @@ export default function RegisterPage() {
               <p style={{fontSize: '.8rem', color: 'rgba(255,255,255,.4)', marginBottom: '1rem'}}>Scan the QR below to pay via GPay / PhonePe / Paytm</p>
               <div className='payment-qr-wrap'>
                 <div className='payment-qr'>
-                  <img src='/images/gpay-qr.jpg' alt='GPay QR' />
+                  <img src='/images/gpay-qr.jpeg' alt='GPay QR' />
                 </div>
               </div>
-              <div className='payment-upi'>UPI ID: harrishmurugesan@okicici</div>
-              <div className='payment-bank'>Name: Harrish CSE Dept | Bank: Indian Bank</div>
+              <div className='payment-upi'>UPI ID: gomathivgim@oksbi</div>
+              <div className='payment-bank'>Name: Iyyappan CSE Dept | Bank: State Bank of India</div>
             </div>
 
             <div className='form-group'>
